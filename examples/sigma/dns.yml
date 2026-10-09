@@ -1,0 +1,16 @@
+title: Suspicious DNS Label
+status: experimental
+logsource:
+  product: network
+  service: dns
+detection:
+  sel_query:
+    QueryName|contains:
+      - example
+      - test
+  condition: 1 of sel*
+falsepositives:
+  - Documentation examples
+tags:
+  - attack.command-and-control
+level: low

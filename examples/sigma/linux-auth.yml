@@ -1,0 +1,17 @@
+title: Root Authentication Failure
+status: experimental
+logsource:
+  product: linux
+  service: auth
+detection:
+  user:
+    User: root
+  terms:
+    - authentication failure
+    - invalid user
+  condition: user and terms
+falsepositives:
+  - Expected security testing
+tags:
+  - attack.credential-access
+level: low

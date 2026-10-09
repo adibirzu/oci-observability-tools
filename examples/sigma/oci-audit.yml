@@ -1,0 +1,14 @@
+title: OCI Audit Delete Activity
+status: experimental
+logsource:
+  product: oci
+  service: audit
+detection:
+  selection:
+    CommandLine|contains: Delete
+  condition: selection
+falsepositives:
+  - Approved resource cleanup
+tags:
+  - attack.impact
+level: medium

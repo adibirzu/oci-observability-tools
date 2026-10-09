@@ -1,0 +1,17 @@
+title: Documentation Network Connection
+status: experimental
+logsource:
+  product: network
+  service: connection
+detection:
+  selection:
+    DestinationIp:
+      - 192.0.2.10
+      - 198.51.100.7
+    DestinationPort:
+      - 443
+      - 8443
+  condition: selection
+falsepositives:
+  - Synthetic example traffic
+level: informational

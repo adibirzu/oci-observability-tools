@@ -1,0 +1,17 @@
+title: Suspicious Windows Process Chain
+status: experimental
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  parent:
+    ParentImage|endswith: service.exe
+  child:
+    Image|endswith: script.exe
+    CommandLine|contains: encoded
+  condition: parent and child
+falsepositives:
+  - Administrative automation
+tags:
+  - attack.execution
+level: medium

@@ -1,0 +1,16 @@
+title: Repeated Remote Logon Failures
+status: experimental
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4625
+    LogonType: 10
+  condition: selection | count() by SourceIp > 5
+  timeframe: 10m
+falsepositives:
+  - User typing mistakes
+tags:
+  - attack.credential-access
+level: medium

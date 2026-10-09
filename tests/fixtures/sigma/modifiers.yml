@@ -1,0 +1,18 @@
+title: Modifier Coverage
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  a:
+    Image|contains: tool
+    ParentImage|startswith: service
+    CommandLine|endswith: flag
+    QueryName|re: "^example"
+  b:
+    EventID: [4688, 4689]
+  c:
+    CommandLine|contains|all: [alpha, beta]
+  condition: all of them
+falsepositives: []
+tags: [attack.execution]
+level: medium

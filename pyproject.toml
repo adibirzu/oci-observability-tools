@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "oci-observability-tools"
+version = "0.1.0"
+description = "Offline skills and validators for OCI Observability and Management"
+requires-python = ">=3.10"
+license = {text = "Apache-2.0"}
+dependencies = ["PyYAML>=6", "jsonschema>=4"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "ruff>=0.6"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]

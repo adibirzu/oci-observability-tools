@@ -87,8 +87,11 @@ The installer never overwrites an unmanaged path. Each installation has a manife
 Python 3.10 or newer is required. For development, create a virtual environment and install the declared packages when available from an approved local package source:
 
 ```sh
+# MUTATES: creates the local virtual environment.
 python3 -m venv .venv
-.venv/bin/python -m pip install -e ".[dev]"
+. .venv/bin/activate
+# MUTATES: installs development dependencies into the activated environment.
+python -m pip install -e ".[dev]"
 ```
 
 Route a question:

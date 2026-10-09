@@ -45,7 +45,7 @@ oci-observability-tools/
 ├── README.md  LICENSE(Apache-2.0)  NOTICE  SECURITY.md  CONTRIBUTING.md  CHANGELOG.md
 ├── AGENTS.md                     # Codex/generic entrypoint: skill index, routing, safety rules (<150 lines)
 ├── GEMINI.md                     # Gemini CLI/Antigravity context (generated from same source as AGENTS.md)
-├── CLAUDE.md                     # one line: @AGENTS.md
+├── CLAUDE.md                     # imports AGENTS.md
 ├── gemini-extension.json         # {name, version, description, contextFileName:"GEMINI.md"}
 ├── Makefile                      # check = freshness + shellcheck + ruff + pytest + redaction
 ├── pyproject.toml                # python>=3.10; explicit setuptools package/assets; runtime/dev deps
@@ -233,8 +233,7 @@ Each doc key below maps to a `docs[]` entry in `catalog/services.json`. Every UR
     - Existing specialized MQL, split-metric alarm, and absence-trigger source:
       `skills/oci-monitoring-mql/SKILL.md`, with `references/mql-syntax.md`.
 
-All eleven bodies are included in generated `chatgpt/knowledge/` upload files. The generator rejects
-unregistered source skills, duplicate registrations, and stale extra bundle files during `--check`.
+See `README.md` for ChatGPT upload usage and section 5 for the generator contract.
 
 ## 4. Capability catalog
 
@@ -359,9 +358,9 @@ All scripts use the stdlib plus pyyaml/jsonschema, expose `main(argv) -> int`, s
   - Prints `path:line:RULE`. Exits 1 on any finding.
   - Rules are listed in section 8.
 - **build_chatgpt.py** `[--check]`
-  - Writes `chatgpt/knowledge/01-router.md` … `09-maturity.md` (each SKILL.md plus the references it links) and `services.json`.
+  - Bundle registration is owned by `BUNDLES` in `scripts/build_chatgpt.py`; each output includes its source skill and linked references. The service catalog is copied to `chatgpt/knowledge/services.json`.
   - Renders GEMINI.md from AGENTS.md: same body, Gemini-specific install line.
-  - `--check` exits 1 if anything is stale.
+  - `--check` exits 1 on stale outputs, obsolete Markdown bundles, duplicate registrations, or a mismatch between registered bundles and source skills. Generation removes obsolete Markdown bundles.
 - **gen_oracle_docs.py** `[--check]`: renders `references/oracle-docs.md` from the catalog, grouped by service.
 - **install.sh**: bash 3.2-compatible, `set -euo pipefail`, shellcheck-clean.
   - Usage: `install.sh [--dry-run] [--uninstall] [--list] [claude|codex|gemini|antigravity ...]`.
@@ -389,7 +388,7 @@ All scripts use the stdlib plus pyyaml/jsonschema, expose `main(argv) -> int`, s
 - **Claude Code**
   - `.claude-plugin/plugin.json`: `{name: "oci-observability-tools", description (+disclaimer), version: "0.1.0", author{name,url}, homepage, repository, license: "Apache-2.0", keywords}`.
   - `marketplace.json`: `{$schema: "https://anthropic.com/claude-code/marketplace.schema.json", name, owner, plugins: [{name, description, version, source: "./", category: "observability"}]}`.
-  - Users install with `/plugin marketplace add <owner>/oci-observability-tools`.
+  - See `README.md` for the current marketplace installation instructions.
 - **Codex**
   - `.codex-plugin/plugin.json` has the same identity fields plus `"skills": "skills/"`.
   - AGENTS.md contains the disclaimer, a skill index (name → when to use), the routing rule ("start with oci-om-router when unsure"), the safety rules (section 8, item 9), and copy-paste helper commands.
@@ -503,7 +502,7 @@ regeneration and rejection of unregistered skills and obsolete generated bundles
 - **T11** Manifests (Claude, Codex, Gemini), AGENTS.md, CLAUDE.md, `test_manifests.py`.
 - **T12** `build_chatgpt.py`, GEMINI.md generation, chatgpt/ files, generated knowledge, `test_chatgpt_bundle.py`.
 - **T13** `install.sh` and `test_install_dryrun.py`; shellcheck-clean.
-- **T14** CI workflow and PR template (checklist: redaction, catalog URLs, under 500 lines). `make check` is green locally on macOS.
+- **T14** CI workflow and PR template (checklist: redaction, catalog URLs, under 500 lines). Require local `make check` success and separate CI matrix evidence; an offline Linux pass does not establish macOS acceptance.
 - **T15** Final README with per-harness install, skill table, `catalog_query` demo, and maturity map. Run `make linkcheck` (online, manual). Run gitleaks over the full history.
 - **T16** Manual smoke test in each harness with the prompt "Which OCI service should I use to trace a slow API?". The answer must route to APM and cite APMOTEL. Record real loaded-agent results separately from offline asset checks before any authorized v0.1.0 tag. Live harness smoke and release publication remain pending; the packaging repair does not authorize them, and AGY runtime is excluded. Repo visibility switches to public only after explicit owner approval.
 

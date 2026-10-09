@@ -1,6 +1,9 @@
 # OCI Observability Tools canonical agent handoff
 
-Last updated: 2026-10-09 16:23:28 UTC.
+Preparation snapshot: 2026-10-09 16:23:28 UTC.
+This record describes the preserved author worktree before the gate trigger. Ignored checkpoints
+and receipts stay in that worktree and are absent from isolated gate worktrees. During an active
+run, the outer executor owns current pipeline status and delivery actions.
 Host: **adi2**. Owner: `skills-packaging-r9` (preserved Firstmate worker).
 Worktree: `<TASK_WORKTREE>`; its exact absolute binding is the private checkpoint
 `worktree` field. Main corr=2d44b702da24b96e approved this split for this handover only.
@@ -97,7 +100,8 @@ Fresh `axi sync --check` returned `legacy_unbound`, `changed: false`, exit 1, be
 pipeline push exists yet. Firstmate inbox 006 confirms this is expected before the first pipeline
 push; source custody remains with this worker, and no reset/force/sync change was attempted.
 
-Pipeline run: **none**. Delivery PR: **none**. Delivery branch has not been pushed.
+At snapshot time: pipeline run **none**, delivery PR **none**, and delivery branch unpushed.
+Reconcile current run, PR and delivery identity through the owning worker before resuming.
 Inherited exact-source CI [run 37930343836](https://github.com/adibirzu/oci-observability-tools/actions/runs/37930343836)
 is failed at original source 6628620. Fresh delivery-head CI and independent review are pending.
 Bounded fresh tag/release reads returned zero records; published release remains unverified.
@@ -112,13 +116,15 @@ Independent pipeline gates and fresh delivery-head CI remain incomplete delivery
 
 ## Exact next safe action
 
-After the handover commit, reconcile the exact delivery commit and clean public working-tree status
-with `.task-private/skills-packaging-r9.checkpoint.json`, then stop committed-ready for Firstmate's
-native `$no-mistakes` trigger. The full finalized accepted intent is preserved privately as
+Before Firstmate's gate trigger, the preserved author worktree must reconcile the exact delivery
+commit and clean public working-tree status with `.task-private/skills-packaging-r9.checkpoint.json`,
+then stop committed-ready for the native `$no-mistakes` trigger. The full finalized accepted intent
+is preserved privately as
 `.task-private/accepted-intent.txt`, with its SHA-256 and original supervisor source in the checkpoint.
 Do not start the pipeline or push before that trigger.
 
-When triggered, use the supervisor-prepared isolated `NM_HOME` for every no-mistakes command.
+Once triggered, the owning worker uses the supervisor-prepared isolated `NM_HOME` for every
+no-mistakes command. Phase agents return only their assigned result to the outer executor.
 Read fresh AXI home/status and current version's `axi run --help`; preserve the full accepted task
 intent and later rulings, including this canonical handover requirement. Independent pipeline
 reviewers own all fixes during the active run. Respond to mechanical gates using AXI; escalate

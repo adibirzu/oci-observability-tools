@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "checkedAt", "services"],
+  "properties": {
+    "schemaVersion": {"const": "1.0"},
+    "checkedAt": {"type": "string", "format": "date"},
+    "services": {
+      "type": "array",
+      "minItems": 12,
+      "items": {"$ref": "#/$defs/service"}
+    }
+  },
+  "$defs": {
+    "service": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "category", "signals", "summary", "useCases", "keywords", "pricingNote", "skill", "relatedServices", "maturityLevels", "docs"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+        "name": {"type": "string", "minLength": 1},
+        "category": {"enum": ["metrics", "logs", "traces", "database", "agents", "eventing"]},
+        "signals": {"type": "array", "minItems": 1, "items": {"enum": ["metrics", "logs", "traces", "events", "sql", "topology", "synthetic"]}},
+        "summary": {"type": "string", "maxLength": 280},
+        "useCases": {"type": "array", "minItems": 2, "items": {"type": "string"}},
+        "keywords": {"type": "array", "minItems": 2, "items": {"type": "string"}},
+        "pricingNote": {"type": "string", "maxLength": 200},
+        "skill": {"type": "string", "pattern": "^oci-[a-z0-9-]+$"},
+        "relatedServices": {"type": "array", "items": {"type": "string", "pattern": "^[a-z0-9-]+$"}},
+        "maturityLevels": {"type": "array", "items": {"enum": ["L0", "L1", "L2", "L3", "L4"]}},
+        "docs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/doc"}}
+      }
+    },
+    "doc": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "title", "url"],
+      "properties": {
+        "key": {"type": "string", "pattern": "^[A-Z]+$"},
+        "title": {"type": "string", "minLength": 1},
+        "url": {"type": "string", "pattern": "^https://(docs|www)\\.oracle\\.com/"}
+      }
+    }
+  }
+}

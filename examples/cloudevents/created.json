@@ -1,0 +1,9 @@
+{
+  "specversion": "1.0",
+  "type": "com.example.resource.created",
+  "source": "/compartments/<COMPARTMENT_OCID>/resources",
+  "id": "event-example-created-001",
+  "time": "2026-01-15T12:00:00Z",
+  "datacontenttype": "application/json",
+  "data": {"resourceId": "<RESOURCE_OCID>", "sourceIp": "192.0.2.10"}
+}

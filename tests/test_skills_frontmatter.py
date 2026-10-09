@@ -103,11 +103,42 @@ def test_deepened_skills_content_and_concepts():
     assert "AWR" in db_skill
     assert "Capacity Planning" in db_skill
 
+    sm_skill = Path("skills/oci-stack-monitoring-agents/SKILL.md").read_text(encoding="utf-8")
+    assert "Management Agent" in sm_skill
+    assert "Stack Monitoring" in sm_skill
+    assert "plugin" in sm_skill
+    assert "topology" in sm_skill
+    assert "Prometheus" in sm_skill
+
+    sigma_skill = Path("skills/oci-detections-sigma/SKILL.md").read_text(encoding="utf-8")
+    assert "Sigma" in sigma_skill
+    assert "OCL" in sigma_skill
+    assert "requires_aggregation" in sigma_skill
+    assert "MITRE" in sigma_skill
+
+    maturity_skill = Path("skills/oci-om-maturity/SKILL.md").read_text(encoding="utf-8")
+    assert "L0" in maturity_skill
+    assert "L1" in maturity_skill
+    assert "L2" in maturity_skill
+    assert "L3" in maturity_skill
+    assert "L4" in maturity_skill
+    assert "AIOps" in maturity_skill
+    assert "MCP Safety Pattern" in maturity_skill
+
     patterns_ref = Path("references/pipelines-patterns.md").read_text(encoding="utf-8")
     assert "Connector Hub Routing Matrix" in patterns_ref
     assert "CloudEvents Normalization" in patterns_ref
     assert "Streaming Lag and Checkpointing" in patterns_ref
     assert "UnconsumedMessages" in patterns_ref
+
+    sigma_ref = Path("references/sigma-field-map.md").read_text(encoding="utf-8")
+    assert "Field Translation Table" in sigma_ref
+    assert "Event ID" in sigma_ref
+    assert "Modifier Translation Table" in sigma_ref
+
+    maturity_ref = Path("references/maturity-l0-l4.md").read_text(encoding="utf-8")
+    assert "L0 — Foundations and Governance" in maturity_ref
+    assert "L4 — AIOps and AI-Agent Observability" in maturity_ref
 
 
 def test_all_reference_files_have_headings_and_content():
@@ -115,4 +146,5 @@ def test_all_reference_files_have_headings_and_content():
         content = ref_file.read_text(encoding="utf-8")
         assert content.startswith("# "), f"Reference {ref_file} must start with top-level # heading"
         assert len(content.splitlines()) >= 5, f"Reference {ref_file} is too short"
+
 

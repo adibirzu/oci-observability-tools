@@ -1,0 +1,13 @@
+{
+  "query": "('Log Source' = 'Windows Sysmon Operational Logs') and (('Process Name' like '*tool*' and 'Parent Process Name' like 'service*' and 'Command Line' like '*flag' and 'Query Name' matches '^example') and ('Event ID' in ('4688', '4689')) and (('Command Line' like '*alpha*' and 'Command Line' like '*beta*')))",
+  "log_sources": [
+    "Windows Sysmon Operational Logs"
+  ],
+  "requires_aggregation": false,
+  "mitre_attack": [
+    "attack.execution"
+  ],
+  "falsepositives": [],
+  "level": "medium",
+  "warnings": []
+}

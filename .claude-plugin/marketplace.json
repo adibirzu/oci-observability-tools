@@ -4,7 +4,7 @@
   "owner": {"name": "OCI Observability Tools contributors"},
   "plugins": [{
     "name": "oci-observability-tools",
-    "description": "Offline OCI Observability and Management skills and validators. Independent community project. Not an Oracle product, not endorsed or supported by Oracle. "Oracle", "OCI", and related marks are trademarks of Oracle and/or its affiliates. Always verify against the official documentation at docs.oracle.com; service capabilities, limits, and pricing change.",
+    "description": "Offline OCI Observability and Management skills and validators. Independent community project. Not an Oracle product, not endorsed or supported by Oracle. \"Oracle\", \"OCI\", and related marks are trademarks of Oracle and/or its affiliates. Always verify against the official documentation at docs.oracle.com; service capabilities, limits, and pricing change.",
     "version": "0.1.0",
     "source": "./",
     "category": "observability"

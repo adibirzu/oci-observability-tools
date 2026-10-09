@@ -3,33 +3,64 @@ name: oci-logging-pipelines
 description: Design OCI Logging and Connector Hub pipelines. Use when enabling service, custom, or audit logs, routing logs, events, or metrics to Log Analytics, Streaming, Object Storage, Functions, or Notifications, or handling OCI event payloads.
 license: Apache-2.0
 ---
-# OCI logging pipelines
+# OCI Logging and Connector Hub Pipelines
 
 ## When to use
 
-Use for service, custom, or audit logging; Connector Hub routes; OCI Events; CloudEvents normalization; and checkpointed stream consumers.
+Use when enabling OCI service logs, configuring custom application log collection via management agents, managing audit logs, routing telemetry with Connector Hub, processing OCI Events rules, normalizing CloudEvents payloads, or building checkpointed OCI Streaming consumers.
 
 ## Key concepts
 
-Logging stores service and custom logs in log groups; audit events are available as audit logs. Connector Hub composes source → optional task → target, subject to supported combinations. Policies grant a placeholder connector group only the required source read and target write abilities.
+OCI Logging centralizes telemetry across three log classes within logical log groups:
+- **Service logs**: Pre-integrated telemetry from OCI native services (Load Balancers, VCN Flow Logs, Object Storage access, OKE).
+- **Custom logs**: Application and host log files ingested through the Unified Monitoring Agent or Management Agent.
+- **Audit logs**: Automatically captured API activity records across all tenancy compartments.
 
-Normalize event envelopes to `specversion`, `type`, `source`, `id`, `time`, and `data`; fold legacy `eventType` and `cloudEventsVersion` into those fields and deduplicate on `id`. For each stream partition, track offset and last-record time, commit only after durable write, resume from the checkpoint, and alert when lag exceeds the chosen objective. See [pipeline patterns](../../references/pipelines-patterns.md).
+Connector Hub provides serverless data movement across services:
+- **Source**: Logging (log groups), Streaming (stream pools), or Monitoring (metrics).
+- **Task (Optional)**: In-flight transformation, filtering, and data enrichment using OCI Functions.
+- **Target**: Log Analytics, Object Storage, Streaming, Notifications, or Functions.
+- **IAM Policies**: Authorization is granted via dynamic groups representing the connector instance (`<CONNECTOR_DYNAMIC_GROUP>`).
+
+OCI Events delivers state-change notifications formatted as CloudEvents:
+- Normalization maps incoming payloads into canonical fields: `specversion`, `type`, `source`, `id`, `time`, and `data`.
+- Deduplication should rely strictly on the immutable `id` field.
+
+OCI Streaming buffers high-throughput telemetry:
+- Consumers must track offsets independently per partition.
+- Commit checkpoints only after records are durably persisted to target storage.
+
+See detailed architectures in [Pipeline Patterns](../../references/pipelines-patterns.md).
 
 ## Workflow
 
-1. Identify source signal, volume, transform, target, and failure behavior.
-2. Verify the connector matrix and least-privilege policy shape.
-3. Normalize and validate example envelopes.
-4. Define retry, deduplication, checkpoint, lag, and dead-letter behavior.
-5. Test with synthetic events before enabling production flow.
+1. Identify the source telemetry signal (service log category, custom log path, event rule pattern, or stream pool).
+2. Create target resources (log group `<LOG_GROUP_OCID>`, Object Storage bucket `<BUCKET_NAME>`, or stream `<STREAM_OCID>`).
+3. Author the Connector Hub pipeline linking source, optional OCI Functions transformation task, and destination sink.
+4. Apply least-privilege IAM policy statements allowing the connector dynamic group to read the source and write to the target.
+5. In downstream event consumers, normalize payloads to CloudEvents v1.0 and deduplicate on the `id` field.
+6. For streaming consumers, maintain independent partition cursors, commit offsets only after durable writes, and alert on lag.
 
 ## Pitfalls
 
-Do not assume every source-task-target combination is supported. Acknowledging before durable write loses records. Deduplicating on mutable payload fields creates duplicates. Mark changing commands `# MUTATES`.
+- Missing IAM permissions: omitting connector dynamic group policies causes silent ingestion failures without pipeline errors.
+- Early offset commit: committing partition offsets before downstream write completion risks irrecoverable data loss on crash.
+- Deduplicating on mutable body fields rather than CloudEvents `id` causes duplicate processing or dropped messages.
+- Over-aggregating log groups: combining diverse retention or security requirements into a single log group complicates governance.
+- Unhandled at-least-once delivery: consumers must handle duplicate messages idempotently.
 
 ## Examples
 
-Connector route: Logging → Functions task → Streaming. A consumer stores a record, then commits its partition offset.
+```text
+# Connector Hub policy pattern
+allow dynamic-group <CONNECTOR_DYNAMIC_GROUP> to read log-content in compartment <COMPARTMENT_NAME>
+allow dynamic-group <CONNECTOR_DYNAMIC_GROUP> to use log-analytics-log-group in compartment <COMPARTMENT_NAME>
+```
+
+```text
+# Stream consumer lag alarm rule
+UnconsumedMessages[5m]{streamId = "<STREAM_OCID>"}.groupBy(partitionId).max() > 5000
+```
 
 ## Official docs
 
@@ -44,4 +75,4 @@ Connector route: Logging → Functions task → Streaming. A consumer stores a r
 
 ## Related skills
 
-Use `oci-ocl-queries` for the analytics destination and `oci-monitoring-alarms` for pipeline health.
+Use `oci-ocl-queries` for Log Analytics search, `oci-monitoring-mql` for pipeline health alarms, and `oci-om-router` for routing decisions.

@@ -85,3 +85,34 @@ def test_skills_and_references_redaction_clean():
     for target in targets:
         findings = scan_text(str(target), target.read_text(encoding="utf-8"))
         assert not findings, f"Redaction findings in {target}: {findings}"
+
+
+def test_deepened_skills_content_and_concepts():
+    lp_skill = Path("skills/oci-logging-pipelines/SKILL.md").read_text(encoding="utf-8")
+    assert "Connector Hub" in lp_skill
+    assert "CloudEvents" in lp_skill
+    assert "Streaming" in lp_skill
+    assert "checkpoint" in lp_skill
+    assert "dynamic-group" in lp_skill
+
+    db_skill = Path("skills/oci-db-observability/SKILL.md").read_text(encoding="utf-8")
+    assert "Database Management" in db_skill
+    assert "Operations Insights" in db_skill
+    assert "Performance Hub" in db_skill
+    assert "ASH" in db_skill
+    assert "AWR" in db_skill
+    assert "Capacity Planning" in db_skill
+
+    patterns_ref = Path("references/pipelines-patterns.md").read_text(encoding="utf-8")
+    assert "Connector Hub Routing Matrix" in patterns_ref
+    assert "CloudEvents Normalization" in patterns_ref
+    assert "Streaming Lag and Checkpointing" in patterns_ref
+    assert "UnconsumedMessages" in patterns_ref
+
+
+def test_all_reference_files_have_headings_and_content():
+    for ref_file in Path("references").glob("*.md"):
+        content = ref_file.read_text(encoding="utf-8")
+        assert content.startswith("# "), f"Reference {ref_file} must start with top-level # heading"
+        assert len(content.splitlines()) >= 5, f"Reference {ref_file} is too short"
+

@@ -3,32 +3,63 @@ name: oci-db-observability
 description: Use OCI Database Management and Operations Insights for Oracle Database performance, fleet health, SQL analysis, and capacity planning. Use when diagnosing database performance or forecasting capacity.
 license: Apache-2.0
 ---
-# OCI database observability
+# OCI Database Observability
 
 ## When to use
 
-Use for database performance incidents, fleet health, SQL analysis, and resource-capacity forecasts.
+Use when diagnosing active database performance incidents, investigating SQL plan regressions, reviewing Active Session History (ASH) and AWR snapshots, analyzing database fleet health, or forecasting long-term CPU, storage, and I/O capacity requirements.
 
 ## Key concepts
 
-Database Management basic and full capabilities differ; verify the current feature matrix and enablement prerequisites. Managed databases may connect through a Management Agent or private endpoint. Performance Hub exposes active session history (ASH) and automatic workload repository (AWR) concepts for time-correlated diagnosis.
+OCI provides two complementary services for database observability:
 
-Operations Insights adds SQL Insights and longer-horizon capacity analysis. Choose Database Management for operational diagnosis and fleet administration; choose Operations Insights for cross-fleet trends and forecasting.
+### Database Management (DBM)
+Focused on real-time operational diagnostics, performance tuning, and fleet administration:
+- **Service Tiers**:
+  - *Basic Management*: High-level metrics, fleet overview, and basic Performance Hub (included with Oracle Cloud databases).
+  - *Full Management*: Advanced Performance Hub, interactive ASH analytics, AWR explorer, SQL tuning sets, and database jobs.
+- **Enablement Prerequisites**: Connectivity established via OCI Private Endpoint (for databases in private subnets) or Management Agent (for on-premise and external databases), plus monitoring database credentials.
+- **Performance Hub**: Correlates ASH session load, wait events (`User I/O`, `CPU`, `Concurrency`, `Commit`), and historical AWR metrics over unified time windows.
+
+### Operations Insights (OPSI)
+Focused on historical analytics, cross-fleet patterns, and predictive machine learning:
+- **SQL Insights**: Fleet-wide SQL inventory, execution degradation detection, plan change classification, and outlier detection across months of history.
+- **Capacity Planning**: Predictive forecasting (30 to 365 days) for database CPU, memory, storage, and I/O utilization with linear and seasonal trend projection.
+
+### Decision Matrix: DBM vs. OPSI
+- Choose **Database Management** for real-time incident triage, active wait state diagnosis, blocking session resolution, and short-term performance troubleshooting.
+- Choose **Operations Insights** for quarterly capacity forecasting, fleet-wide SQL plan regression analysis, and resource exhaustion prediction.
 
 ## Workflow
 
-1. Classify the question as current performance, historical SQL, fleet health, or forecast.
-2. Confirm database type, management mode, agent/private-endpoint path, and permissions.
-3. Correlate load, waits, sessions, and SQL over the same window.
-4. Use Operations Insights for trend and capacity questions.
+1. Classify the inquiry as active operational troubleshooting (DBM) or analytical fleet trend/capacity forecasting (OPSI).
+2. Verify database enablement prerequisites (private endpoint security lists, agent status, and monitoring user privileges).
+3. For active degradation: open Performance Hub in Database Management, evaluate average active sessions against CPU thread count, and isolate top wait classes.
+4. Drill down from wait classes into specific SQL IDs, plan hash values, and blocking session trees.
+5. For capacity planning: navigate to Operations Insights, inspect fleet utilization trends, and review projected exhaustion dates for storage and compute.
 
 ## Pitfalls
 
-A high-load SQL statement may be a symptom rather than a cause. Do not compare mismatched time windows. AWR and ASH availability depends on database configuration and entitlements; verify current documentation.
+- Diagnosing symptoms instead of root causes: a high-CPU SQL statement may be waiting on lock contention or unindexed lookups caused by another transaction.
+- Network port blocking: forgetting to allow ingress on database listener port 1521 from the private endpoint subnet prevents metric collection.
+- Mismatched time ranges: when correlating application APM traces with database ASH, ensure time windows and time zones match precisely.
+- Insufficient AWR history: standard database AWR retention is typically 8 days; use Operations Insights for extended historical retention (up to 25 months).
 
 ## Examples
 
-For a recent latency spike, begin in Performance Hub and correlate ASH waits with SQL. For a quarterly storage forecast, use Operations Insights capacity planning.
+```text
+# Performance Hub triage sequence
+1. Check Average Active Sessions (AAS) against CPU cores.
+2. Filter ASH by Wait Class = "User I/O" or "Concurrency".
+3. Identify top SQL ID contributing to wait events.
+4. Review Execution Plan hash history for recent plan changes.
+```
+
+```text
+# Decision Rule:
+# If investigating current latency spike -> Database Management Performance Hub
+# If forecasting storage growth for next 6 months -> Operations Insights Capacity Planning
+```
 
 ## Official docs
 
@@ -39,4 +70,4 @@ For a recent latency spike, begin in Performance Hub and correlate ASH waits wit
 
 ## Related skills
 
-Use `oci-stack-monitoring-agents` for agent health and `oci-om-maturity` for coverage planning.
+Use `oci-stack-monitoring-agents` for host and agent health, `oci-monitoring-mql` for metric-based alerts, and `oci-om-maturity` for database observability roadmaps.

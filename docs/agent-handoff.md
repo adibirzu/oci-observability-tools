@@ -1,5 +1,40 @@
 # OCI Observability Tools canonical agent handoff
 
+## Active CI fix snapshot
+
+This update supersedes the pre-trigger status below for the active CI phase only.
+PR: [1](https://github.com/adibirzu/oci-observability-tools/pull/1), branch
+`fm/skills-packaging-r9`; observed pipeline/PR head:
+`6229bc9c24edfafa6b844f756f78420801dc54ae`. Host remains **adi2**.
+The isolated phase worktree is `<CI_FIX_WORKTREE>`; its exact binding and owned paths are
+recorded in `.venv/evidence/ci-fix-checkpoint.json`. All existing commits remain preserved.
+
+Authenticated same-head reads confirm push run `37963459906` passed, while pull-request run
+`37963585765` failed in job `113932243039`: `GITHUB_TOKEN is now required to scan pull requests`.
+Earlier steps passed; three sibling jobs were cancelled. Node 20 is a separate warning.
+The workflow correction supplies the generated token only to Gitleaks and adds
+`pull-requests: read` alongside `contents: read`; scanner and matrix remain mandatory.
+Official input: [Gitleaks v2 usage](https://github.com/gitleaks/gitleaks-action/blob/v2/README.md).
+Required permission: [PR commit API](https://docs.github.com/en/rest/pulls/pulls#list-commits-on-a-pull-request).
+
+PATH still resolves the system gh 2.45.0, which lacks `api --slurp` and `pr checks --json`.
+Official gh 2.102.0 is staged inside this phase worktree; its release API digests and checksum file
+were verified, and both provider-reading interfaces succeeded using that executable and existing
+authentication. Receipts: `.venv/evidence/ci-gh-provenance.json` and `ci-provider-reads.json`.
+The requested user-level gh installation awaits resolution of the explicit worktree-only boundary.
+The supplied historical daemon PID no longer exists; no daemon was restarted or reconfigured.
+Local normalized workflow checks reproduced the missing input before correction and pass afterward
+for both events and all four matrix combinations; `git diff --check` and current-tree redaction pass.
+Semantic receipt: `.venv/evidence/ci-workflow-semantics.json`. These are local configuration checks;
+the corrected workflow has not yet run in GitHub Actions. Read-only AXI status in this isolated
+worktree reports `repo not initialized`; no initialization or pipeline control was attempted.
+
+Next safe action: resolve the gh installation boundary, then let the outer executor review,
+revalidate and push this same run's correction. Mandatory PR-event checks must pass on the final
+pushed head before readiness. This phase has not pushed, merged or approved any gate.
+
+## Preserved author preparation snapshot
+
 Preparation snapshot: 2026-10-09 16:23:28 UTC.
 This record describes the preserved author worktree before the gate trigger. Ignored checkpoints
 and receipts stay in that worktree and are absent from isolated gate worktrees. During an active
@@ -114,7 +149,7 @@ corr=2d44b702da24b96e: only a sanitized public reference is retained here; the e
 remains in the private checkpoint. No personal-path rule, allowlist exception or review was changed.
 Independent pipeline gates and fresh delivery-head CI remain incomplete delivery scope.
 
-## Exact next safe action
+## Pre-trigger next action (historical)
 
 Before Firstmate's gate trigger, the preserved author worktree must reconcile the exact delivery
 commit and clean public working-tree status with `.task-private/skills-packaging-r9.checkpoint.json`,

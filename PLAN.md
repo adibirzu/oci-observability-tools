@@ -428,7 +428,8 @@ regeneration and rejection of unregistered skills and obsolete generated bundles
 | test_manifests.py | All three manifests plus `gemini-extension.json` parse. name, version, and license agree with each other and with pyproject. Every description contains "Not an Oracle product". |
 
 **CI** (`.github/workflows/ci.yml`):
-- Runs on push and pull_request, with `permissions: contents: read` and no secrets.
+- Runs on push and pull_request, with `contents: read` and `pull-requests: read` permissions.
+  Gitleaks receives only the automatically generated `GITHUB_TOKEN` through its documented env input.
 - Matrix: ubuntu-latest and macos-latest, Python 3.10 and 3.12.
 - Steps:
   1. checkout with `fetch-depth: 0`

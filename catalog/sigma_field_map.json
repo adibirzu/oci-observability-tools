@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "1.0",
+  "fields": {
+    "EventID": {"ocl": "Event ID", "type": "string"},
+    "Image": {"ocl": "Process Name", "type": "string"},
+    "ParentImage": {"ocl": "Parent Process Name", "type": "string"},
+    "CommandLine": {"ocl": "Command Line", "type": "string"},
+    "User": {"ocl": "Principal Name", "type": "string"},
+    "AccountName": {"ocl": "Principal Name", "type": "string"},
+    "TargetUserName": {"ocl": "Target User", "type": "string"},
+    "SourceIp": {"ocl": "Source IP", "type": "string"},
+    "DestinationIp": {"ocl": "Destination IP", "type": "string"},
+    "SourcePort": {"ocl": "Source Port", "type": "number"},
+    "DestinationPort": {"ocl": "Destination Port", "type": "number"},
+    "LogonType": {"ocl": "Logon Type", "type": "string"},
+    "QueryName": {"ocl": "Query Name", "type": "string"}
+  },
+  "logsources": {
+    "windows/security": ["Windows Security Events"],
+    "windows/sysmon": ["Windows Sysmon Operational Logs"],
+    "linux/auth": ["Linux Secure Logs"],
+    "oci/audit": ["OCI Audit Logs"]
+  }
+}

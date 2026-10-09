@@ -1,0 +1,13 @@
+repos:
+  - repo: local
+    hooks:
+      - id: redaction-check
+        name: public-safety redaction gate
+        entry: python scripts/redaction_check.py --staged
+        language: system
+        pass_filenames: false
+      - id: gitleaks
+        name: gitleaks
+        entry: gitleaks protect --staged --redact
+        language: system
+        pass_filenames: false

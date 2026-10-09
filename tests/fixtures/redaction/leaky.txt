@@ -1,0 +1,1 @@
+This fixture is intentionally encoded. Tests construct prohibited values in memory so the repository itself remains public-safe.

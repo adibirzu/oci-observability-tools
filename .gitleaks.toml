@@ -1,0 +1,8 @@
+title = "oci-observability-tools public repository policy"
+
+[allowlist]
+description = "Synthetic placeholders and generated test construction"
+regexTarget = "match"
+regexes = [
+  '''<([A-Z][A-Z0-9_]*)>''',
+]

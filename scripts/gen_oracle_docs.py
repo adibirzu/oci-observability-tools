@@ -7,7 +7,6 @@ import argparse
 import json
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / "catalog/services.json"
 OUTPUT = ROOT / "references/oracle-docs.md"
@@ -15,7 +14,12 @@ OUTPUT = ROOT / "references/oracle-docs.md"
 
 def render() -> str:
     data = json.loads(CATALOG.read_text(encoding="utf-8"))
-    lines = ["# Official Oracle documentation registry", "", f"Catalog checked: {data['checkedAt']}", ""]
+    lines = [
+        "# Official Oracle documentation registry",
+        "",
+        f"Catalog checked: {data['checkedAt']}",
+        "",
+    ]
     for service in data["services"]:
         lines.extend([f"## {service['name']}", ""])
         for doc in service["docs"]:

@@ -20,7 +20,16 @@ class Finding:
     rule: str
 
 
-SKIP_PARTS = {".git", ".venv", "venv", ".tox", "node_modules", "__pycache__", ".pytest_cache", ".ruff_cache"}
+SKIP_PARTS = {
+    ".git",
+    ".venv",
+    "venv",
+    ".tox",
+    "node_modules",
+    "__pycache__",
+    ".pytest_cache",
+    ".ruff_cache",
+}
 SKIP_WALK = {"tests/fixtures/redaction/leaky.txt"}
 ALLOWED_NETWORKS = tuple(
     ipaddress.ip_network(value)

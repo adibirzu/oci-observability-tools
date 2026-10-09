@@ -34,7 +34,7 @@ Install the skills directly:
 ./install.sh claude
 ```
 
-For a Claude Code plugin marketplace, add `<OWNER>/oci-observability-tools` with `/plugin marketplace add`, then install `oci-observability-tools`. The local manifest is in `.claude-plugin/`.
+For a Claude Code plugin marketplace, add `adibirzu/oci-observability-tools` with `/plugin marketplace add`, then install `oci-observability-tools`. The local manifest is in `.claude-plugin/`.
 
 ### Codex
 
@@ -71,7 +71,7 @@ Set `AGY_SKILLS_DIR` to override `~/.antigravity/skills`.
 3. Upload all files in `chatgpt/knowledge/` as knowledge.
 4. Optionally use `chatgpt/conversation-starters.md` for starter prompts.
 
-The committed knowledge bundle is generated offline. Run `python scripts/build_chatgpt.py --check` to confirm it matches the skills and references.
+The eleven committed skill bundles and service catalog are generated offline. Run `python scripts/build_chatgpt.py --check` to confirm it matches the skills and references.
 
 ### Preview or remove an installation
 
@@ -98,6 +98,21 @@ python scripts/catalog_query.py "Which service traces a slow API?" --top 3 --jso
 ```
 
 The first result is Application Performance Monitoring and links to the registered [APM documentation](https://docs.oracle.com/en-us/iaas/application-performance-monitoring/home.htm). The OpenTelemetry setup skill cites the [open-source tracing guide](https://docs.oracle.com/en-us/iaas/application-performance-monitoring/doc/configure-open-source-tracing-systems.html).
+
+A wheel includes the helper modules, catalogs and schemas, all eleven skill bodies, linked references,
+generated ChatGPT knowledge, and harness assets. Build it from the development environment:
+
+```sh
+# MUTATES: writes local distribution artifacts.
+python -m build
+# MUTATES: installs into the activated virtual environment.
+python -m pip install dist/oci_observability_tools-0.1.0-py3-none-any.whl
+oci-catalog-query "slow API traces" --top 1 --json --validate
+```
+
+Installed entry points are `oci-catalog-query`, `oci-ocl-lint`, `oci-sigma-to-ocl`, and
+`oci-redaction-check`. Modules also run with `python -m oci_observability_tools.scripts.<helper>`.
+Direct `python scripts/<helper>.py` commands continue to work from a checkout.
 
 Lint OCL, convert a Sigma rule, and scan public content:
 
@@ -129,7 +144,16 @@ python scripts/gen_oracle_docs.py --check
 python scripts/build_chatgpt.py --check
 ```
 
+`make check` requires shellcheck and includes configured Ruff lint, both generated freshness checks,
+shell lint, the complete behavioral suite, and redaction. Packaging regressions build an sdist and
+wheel offline and execute installed standard-library helpers and generators in fresh temporary
+environments outside the checkout. Runtime dependencies must be installed to use Sigma conversion.
+
 Tests block network sockets. `make linkcheck` is an explicitly manual online task and is not part of offline verification. See `CONTRIBUTING.md` for authoring and leak-response rules and `SECURITY.md` for private reporting.
+
+The declared version is `0.1.0`; published-release and real harness-load acceptance remain pending.
+Offline routing and temporary install/uninstall tests do not establish live loaded-agent behavior.
+The canonical recovery record is [docs/agent-handoff.md](docs/agent-handoff.md).
 
 ## License
 

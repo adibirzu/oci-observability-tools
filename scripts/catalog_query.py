@@ -8,9 +8,9 @@ import json
 import re
 from pathlib import Path
 
-try:
-    from scripts.minivalidate import validate_catalog
-except ModuleNotFoundError:
+if __package__:
+    from .minivalidate import validate_catalog
+else:
     from minivalidate import validate_catalog
 
 

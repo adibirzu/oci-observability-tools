@@ -23,6 +23,8 @@ jobs:
           python-version: ${{ matrix.python }}
       - run: pip install -e ".[dev]"
       - run: ruff check .
+      - run: python scripts/gen_oracle_docs.py --check
+      - run: python scripts/build_chatgpt.py --check
       - if: runner.os == 'Linux'
         run: shellcheck install.sh
       - run: python scripts/redaction_check.py .

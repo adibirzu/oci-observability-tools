@@ -2,7 +2,6 @@ from pathlib import Path
 
 from scripts.catalog_query import search
 
-
 PROMPT = "Which OCI service should I use to trace a slow API?"
 APMOTEL = "https://docs.oracle.com/en-us/iaas/application-performance-monitoring/doc/configure-open-source-tracing-systems.html"
 

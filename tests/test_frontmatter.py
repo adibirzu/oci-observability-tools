@@ -14,8 +14,8 @@ def skills():
     return sorted(Path("skills").glob("*/SKILL.md"))
 
 
-def test_all_nine_skills_have_valid_frontmatter_and_sections():
-    assert len(skills()) == 9
+def test_all_skills_have_valid_frontmatter_and_sections():
+    assert len(skills()) == 11
     for path in skills():
         text = path.read_text(encoding="utf-8")
         match = re.match(r"\A---\n(.*?)\n---\n", text, re.S)

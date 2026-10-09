@@ -15,7 +15,9 @@ Start with `oci-om-router` when the service or signal is unclear. Then load only
 | `oci-om-router` | Selecting an O&M service or translating a cross-cloud job |
 | `oci-ocl-queries` | Writing or debugging Log Analytics OCL |
 | `oci-apm-otel` | Instrumenting traces, RUM, or synthetics |
+| `oci-apm-tracing` | Distributed tracing, Trace Explorer queries, and synthetic monitors |
 | `oci-monitoring-alarms` | Writing MQL, custom metrics, alarms, or notifications |
+| `oci-monitoring-mql` | Advanced MQL queries, split-metric alarms, and absence triggers |
 | `oci-logging-pipelines` | Collecting and routing logs, events, and streams |
 | `oci-db-observability` | Diagnosing database performance or planning capacity |
 | `oci-stack-monitoring-agents` | Managing agents, discovery, topology, or Prometheus |

@@ -11,7 +11,9 @@ Offline-first skills and validation helpers for OCI Observability & Management. 
 | `oci-om-router` | Choose an O&M service by job and signal |
 | `oci-ocl-queries` | Author and debug Log Analytics OCL |
 | `oci-apm-otel` | Instrument APM, OpenTelemetry, RUM, and synthetics |
+| `oci-apm-tracing` | Deep distributed tracing, Trace Explorer, and synthetics |
 | `oci-monitoring-alarms` | Write MQL and design alarms |
+| `oci-monitoring-mql` | Author MQL queries, split metrics, and absence alarms |
 | `oci-logging-pipelines` | Route logs, events, and streaming records |
 | `oci-db-observability` | Diagnose database performance and capacity |
 | `oci-stack-monitoring-agents` | Operate discovery, topology, agents, and Prometheus |

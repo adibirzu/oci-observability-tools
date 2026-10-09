@@ -1,0 +1,1 @@
+'Log Source' = 'OCI Audit Logs' and 'Event ID' = '4625' | stats count as Count

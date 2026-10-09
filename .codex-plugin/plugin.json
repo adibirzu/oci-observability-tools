@@ -1,0 +1,11 @@
+{
+  "name": "oci-observability-tools",
+  "description": "Offline OCI Observability and Management skills and validators. Independent community project. Not an Oracle product, not endorsed or supported by Oracle. "Oracle", "OCI", and related marks are trademarks of Oracle and/or its affiliates. Always verify against the official documentation at docs.oracle.com; service capabilities, limits, and pricing change.",
+  "version": "0.1.0",
+  "author": {"name": "OCI Observability Tools contributors", "url": "https://github.com/oci-observability-tools/oci-observability-tools"},
+  "homepage": "https://github.com/oci-observability-tools/oci-observability-tools",
+  "repository": "https://github.com/oci-observability-tools/oci-observability-tools",
+  "license": "Apache-2.0",
+  "keywords": ["oci", "observability", "monitoring", "logging", "apm"],
+  "skills": "skills/"
+}

@@ -1,0 +1,7 @@
+{
+  "name": "oci-observability-tools",
+  "version": "0.1.0",
+  "description": "Offline OCI Observability and Management skills and validators. Independent community project. Not an Oracle product, not endorsed or supported by Oracle. "Oracle", "OCI", and related marks are trademarks of Oracle and/or its affiliates. Always verify against the official documentation at docs.oracle.com; service capabilities, limits, and pricing change.",
+  "contextFileName": "GEMINI.md",
+  "license": "Apache-2.0"
+}

@@ -1,0 +1,196 @@
+{
+  "schema": "skills-main063-prd20.pins.v1",
+  "prepared_utc": "2026-10-09T21:29:10Z",
+  "base_revision": "662862029babf4acad6352ee5d83f4a79cd0f09b",
+  "alternate_receipt_revision": "7bcd39fceb1c4150ad14d8c375b356c5cf94d788",
+  "note": "Computed before the commit. The commit id and tree ids cannot appear in this committed file; they are recorded in the private checkpoint and status file after the commit.",
+  "digest_definition": "sha256 over lines 'path<TAB>sha256<LF>' for the set members sorted by path",
+  "prd_files": [
+    {
+      "path": ".planning/prds/PRD-001.md",
+      "bytes": 8072,
+      "sha256": "2a5d3e45e130e96a6d90362f8b791ece18757fea7ba5218db8c3d34092f2f929",
+      "git_blob": "460152d30dd9340513e53c74f80b5a55685e1dae"
+    },
+    {
+      "path": ".planning/prds/PRD-002.md",
+      "bytes": 7975,
+      "sha256": "72dce259b3a4551c3e02bcc154abe6b0b0a5c5cfc058e9033a4ce574bb2e35e8",
+      "git_blob": "72e752b406495304fc3b527b1f3d63c0e971a5af"
+    },
+    {
+      "path": ".planning/prds/PRD-003.md",
+      "bytes": 8033,
+      "sha256": "6fdbcd00324eab1b4989e51ddef6ef87a53cdc820872d2c2c79dc02cf0b0b992",
+      "git_blob": "58ec7cd2f223e895875f3db9cb68f1c6d09d822e"
+    },
+    {
+      "path": ".planning/prds/PRD-004.md",
+      "bytes": 7862,
+      "sha256": "281b172626c9d11aa19744cc6cb7821fc0bc34ec7ef8158f8e34442a82e5c128",
+      "git_blob": "d48402e839b589eca711ddc04601cac8850c7600"
+    },
+    {
+      "path": ".planning/prds/PRD-005.md",
+      "bytes": 7694,
+      "sha256": "f8739e3ff564e774b856846066c7bc9472bdc46abab26e2147a227b0830983d5",
+      "git_blob": "99cf08949976bf1280e47fc4ab3d7b15f09d683b"
+    },
+    {
+      "path": ".planning/prds/PRD-006.md",
+      "bytes": 7443,
+      "sha256": "e264e4dc367ca8b4a34869b80d2cca04e372d5945b2ca4be5445e3a0d9825465",
+      "git_blob": "5be946cdcbfadf7669f36b4ca78a1304a0e2ac9a"
+    },
+    {
+      "path": ".planning/prds/PRD-007.md",
+      "bytes": 8154,
+      "sha256": "b6297436c4b6f894a343ac24d822612e672dd79a403665a39383e586c4e3841b",
+      "git_blob": "d2cb0b9a9464e4a4ff54ecf29d5fd7933c43d4dc"
+    },
+    {
+      "path": ".planning/prds/PRD-008.md",
+      "bytes": 7638,
+      "sha256": "40a2a77cba58ac3f5ad595b5eea67a53804fa1e274419ec8b28682a308ad3cfe",
+      "git_blob": "273bcb6efe8b30879dc176dd1c1b49943f335d86"
+    },
+    {
+      "path": ".planning/prds/PRD-009.md",
+      "bytes": 7450,
+      "sha256": "cfbaf3d68c8b4d50ec52d82d532a9011390276a39a3ff80313f0c7a5de873aa4",
+      "git_blob": "013bc6f9098811cd069008e1f953f9a1dde2e454"
+    },
+    {
+      "path": ".planning/prds/PRD-010.md",
+      "bytes": 6911,
+      "sha256": "57ada84558f402265ee6220f2e2d1ac0d277d0fa92d6ec6df30024213484a0ff",
+      "git_blob": "5178216638a0887f3800d117b2b9078cdfe8680e"
+    },
+    {
+      "path": ".planning/prds/PRD-011.md",
+      "bytes": 6812,
+      "sha256": "167d8d55937173f97affddac59a54ee54b15bc5c75f942c6e2325829a836d7ad",
+      "git_blob": "074b4967fbe7abdd139f1ce40ee10f4f5a9ba8a7"
+    },
+    {
+      "path": ".planning/prds/PRD-012.md",
+      "bytes": 6432,
+      "sha256": "c0f8c30c15284c9a264da6f6fe9fbfec77e20863f56172c2f3654888c8215000",
+      "git_blob": "f530b05706229878f6786b71fc869d2d901ebd0d"
+    },
+    {
+      "path": ".planning/prds/PRD-013.md",
+      "bytes": 6473,
+      "sha256": "f75d41457e3e0dd32c4dfcaf00d97005e8810e1e5f83318867b7fccf862d5a44",
+      "git_blob": "9fa95551d4fed62db6deeb188bb110f983233ff8"
+    },
+    {
+      "path": ".planning/prds/PRD-014.md",
+      "bytes": 6438,
+      "sha256": "34292a58ec379aeb988af34dd1c5b0649b0093f39f79691d53e3bde1c3fa093b",
+      "git_blob": "5a789dde64ad2b1c2d948a2fcfdc317d5233589c"
+    },
+    {
+      "path": ".planning/prds/PRD-015.md",
+      "bytes": 7305,
+      "sha256": "f883d0363ef2201c01cbdf8e812d852280c6d0381bf33b205240f52119ccead8",
+      "git_blob": "ea5fc6d047f454ec9ec11a5cc96bb887740d6aba"
+    },
+    {
+      "path": ".planning/prds/PRD-016.md",
+      "bytes": 7076,
+      "sha256": "b9f562afd3935b225efa0eacd1fb2acd51dbfe173eaf62496f65677bafba76e8",
+      "git_blob": "925500fcf93a9bd53d4d32f331422e9a7503bb4b"
+    },
+    {
+      "path": ".planning/prds/PRD-017.md",
+      "bytes": 6882,
+      "sha256": "5c45088a7424ecbea41d8771075dc3c916ec6170457feae8bf19f33970d44858",
+      "git_blob": "494ac2c3e2f7dbee3736a43d3f6b2033fc708749"
+    },
+    {
+      "path": ".planning/prds/PRD-018.md",
+      "bytes": 6640,
+      "sha256": "a7cae5445536746579110ea992b22081e73f5f1cf17ac567009cf97578ce190e",
+      "git_blob": "ea1d83973e29fdfd72e521f3594d58fffc0484dc"
+    },
+    {
+      "path": ".planning/prds/PRD-019.md",
+      "bytes": 6640,
+      "sha256": "04490dc07aa245cb0eeedfb35148214ec742ae937bf54bd5ed04b138803dbeed",
+      "git_blob": "ec036ff0c3e5ec95648d701b2498f8a70b666fa2"
+    },
+    {
+      "path": ".planning/prds/PRD-020.md",
+      "bytes": 7623,
+      "sha256": "e534a873b372fd0562dc0baf66b660941917062445074a3189b0ee4bc8dd39c2",
+      "git_blob": "eaf2381d86f4c43d7281fcb8e4e96d640c9e1b8e"
+    }
+  ],
+  "index_file": [
+    {
+      "path": ".planning/prds/README.md",
+      "bytes": 7111,
+      "sha256": "bbda06e4dde1ba4ab482d5e207db63ab8ad8bcd6ea883ae1abd0fb414685a688",
+      "git_blob": "8358fe5371706a0967a10404cde0dabd18af2b5d"
+    }
+  ],
+  "context_files": [
+    {
+      "path": ".planning/phases/skills-main063-prd20/README.md",
+      "bytes": 862,
+      "sha256": "967e80a6b6c2370a982aa710cc95aa3ee3e25908a46b15106f2c67fb2f990a02",
+      "git_blob": "cf8d3884a6fc021f7571c48763e0c20d844b9d27"
+    },
+    {
+      "path": ".planning/phases/skills-main063-prd20/cohort-index.md",
+      "bytes": 8102,
+      "sha256": "5bc51f2efffee3599a5c08aaa5f781e095d12435fd35951d8b9a663d87c6c8d1",
+      "git_blob": "fb7452243e116faaf3c8d9971a0f94c58709bf78"
+    }
+  ],
+  "sets": {
+    "first10": {
+      "members": [
+        ".planning/prds/PRD-001.md",
+        ".planning/prds/PRD-002.md",
+        ".planning/prds/PRD-003.md",
+        ".planning/prds/PRD-004.md",
+        ".planning/prds/PRD-005.md",
+        ".planning/prds/PRD-006.md",
+        ".planning/prds/PRD-007.md",
+        ".planning/prds/PRD-008.md",
+        ".planning/prds/PRD-009.md",
+        ".planning/prds/PRD-010.md"
+      ],
+      "digest": "c5b7fef73f6d97e09e60320c86eb91e71896962c1a2e2077e13d7f530cd2a9c6",
+      "reviewer": "independent Opus 5.5 (staged by Firstmate)"
+    },
+    "all20": {
+      "members": [
+        ".planning/prds/PRD-001.md",
+        ".planning/prds/PRD-002.md",
+        ".planning/prds/PRD-003.md",
+        ".planning/prds/PRD-004.md",
+        ".planning/prds/PRD-005.md",
+        ".planning/prds/PRD-006.md",
+        ".planning/prds/PRD-007.md",
+        ".planning/prds/PRD-008.md",
+        ".planning/prds/PRD-009.md",
+        ".planning/prds/PRD-010.md",
+        ".planning/prds/PRD-011.md",
+        ".planning/prds/PRD-012.md",
+        ".planning/prds/PRD-013.md",
+        ".planning/prds/PRD-014.md",
+        ".planning/prds/PRD-015.md",
+        ".planning/prds/PRD-016.md",
+        ".planning/prds/PRD-017.md",
+        ".planning/prds/PRD-018.md",
+        ".planning/prds/PRD-019.md",
+        ".planning/prds/PRD-020.md"
+      ],
+      "digest": "7bbb851db9e71a5b7d98e80ea73b08549cb67bbfe8109336226c4202c3a11568",
+      "reviewer": "independent Fable 5.1 (staged by Firstmate)"
+    }
+  }
+}

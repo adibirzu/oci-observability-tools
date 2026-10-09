@@ -1,0 +1,147 @@
+{
+  "schemaVersion": "1.0",
+  "checkedAt": "2026-10-09",
+  "services": [
+    {
+      "id": "monitoring", "name": "Monitoring", "category": "metrics", "signals": ["metrics"],
+      "summary": "Query service and custom metrics and create alarms.",
+      "useCases": ["query service metrics", "publish custom metrics", "create threshold alarms"],
+      "keywords": ["mql", "alarm", "threshold", "cpu", "metric"],
+      "pricingNote": "See the official OCI pricing page for current terms.", "skill": "oci-monitoring-alarms",
+      "relatedServices": ["notifications"], "maturityLevels": ["L1"],
+      "docs": [
+        {"key": "MON", "title": "Monitoring", "url": "https://docs.oracle.com/en-us/iaas/Content/Monitoring/home.htm"},
+        {"key": "MQL", "title": "Monitoring Query Language", "url": "https://docs.oracle.com/en-us/iaas/Content/Monitoring/Reference/mql.htm"},
+        {"key": "ALARM", "title": "Managing alarms", "url": "https://docs.oracle.com/en-us/iaas/Content/Monitoring/Tasks/managingalarms.htm"},
+        {"key": "CUSTMET", "title": "Publishing custom metrics", "url": "https://docs.oracle.com/en-us/iaas/Content/Monitoring/Tasks/publishingcustommetrics.htm"}
+      ]
+    },
+    {
+      "id": "logging", "name": "Logging", "category": "logs", "signals": ["logs"],
+      "summary": "Collect and manage OCI service, custom, and audit logs.",
+      "useCases": ["enable service logs", "collect custom logs", "organize log groups"],
+      "keywords": ["logging", "audit", "custom logs", "log group"],
+      "pricingNote": "See the official OCI pricing page for current terms.", "skill": "oci-logging-pipelines",
+      "relatedServices": ["log-analytics", "service-connector-hub"], "maturityLevels": ["L0", "L1"],
+      "docs": [
+        {"key": "LOG", "title": "Logging", "url": "https://docs.oracle.com/en-us/iaas/Content/Logging/home.htm"},
+        {"key": "CUSTLOG", "title": "Custom logs", "url": "https://docs.oracle.com/en-us/iaas/Content/Logging/Concepts/custom_logs.htm"}
+      ]
+    },
+    {
+      "id": "log-analytics", "name": "Log Analytics", "category": "logs", "signals": ["logs", "events"],
+      "summary": "Search, parse, correlate, and alert on logs.",
+      "useCases": ["search and correlate logs", "parse custom log formats", "scheduled detection alerts"],
+      "keywords": ["siem", "ocl", "parser", "search", "detection", "sigma"],
+      "pricingNote": "Billed by storage tier; see the official OCI pricing page.", "skill": "oci-ocl-queries",
+      "relatedServices": ["logging", "service-connector-hub"], "maturityLevels": ["L2"],
+      "docs": [
+        {"key": "LA", "title": "Log Analytics", "url": "https://docs.oracle.com/en-us/iaas/log-analytics/home.htm"},
+        {"key": "LAQ", "title": "Query and search", "url": "https://docs.oracle.com/en-us/iaas/log-analytics/doc/query-search.html"},
+        {"key": "LACMD", "title": "OCL command reference", "url": "https://docs.oracle.com/en-us/iaas/log-analytics/doc/command-reference.html"},
+        {"key": "LASCH", "title": "Ingest with Connector Hub", "url": "https://docs.oracle.com/en-us/iaas/log-analytics/doc/ingest-logs-from-other-oci-services-using-service-connector.html"},
+        {"key": "LADET", "title": "Create alerts for detected events", "url": "https://docs.oracle.com/en-us/iaas/log-analytics/doc/create-alerts-detected-events.html"}
+      ]
+    },
+    {
+      "id": "apm", "name": "Application Performance Monitoring", "category": "traces", "signals": ["traces", "synthetic"],
+      "summary": "Trace applications, observe browser activity, and run synthetic monitors.",
+      "useCases": ["trace slow APIs", "monitor browser sessions", "run synthetic monitors"],
+      "keywords": ["apm", "trace", "span", "latency", "slow", "rum", "otel"],
+      "pricingNote": "See the official OCI pricing page for current terms.", "skill": "oci-apm-otel",
+      "relatedServices": ["log-analytics"], "maturityLevels": ["L3"],
+      "docs": [
+        {"key": "APM", "title": "Application Performance Monitoring", "url": "https://docs.oracle.com/en-us/iaas/application-performance-monitoring/home.htm"},
+        {"key": "APMOTEL", "title": "Configure open-source tracing", "url": "https://docs.oracle.com/en-us/iaas/application-performance-monitoring/doc/configure-open-source-tracing-systems.html"},
+        {"key": "APMSYN", "title": "Synthetic monitoring", "url": "https://docs.oracle.com/en-us/iaas/application-performance-monitoring/doc/use-synthetic-monitoring.html"}
+      ]
+    },
+    {
+      "id": "stack-monitoring", "name": "Stack Monitoring", "category": "agents", "signals": ["metrics", "topology"],
+      "summary": "Discover and monitor application-stack resources and topology.",
+      "useCases": ["discover application resources", "visualize stack topology", "monitor resource baselines"],
+      "keywords": ["stack", "topology", "weblogic", "discovery", "promotion"],
+      "pricingNote": "See the official OCI pricing page for current terms.", "skill": "oci-stack-monitoring-agents",
+      "relatedServices": ["management-agent", "monitoring"], "maturityLevels": ["L2"],
+      "docs": [
+        {"key": "SM", "title": "Stack Monitoring", "url": "https://docs.oracle.com/en-us/iaas/stack-monitoring/home.htm"},
+        {"key": "SMDISC", "title": "Promotion and discovery", "url": "https://docs.oracle.com/en-us/iaas/stack-monitoring/doc/promotion-and-discovery.html"}
+      ]
+    },
+    {
+      "id": "database-management", "name": "Database Management", "category": "database", "signals": ["sql", "metrics"],
+      "summary": "Inspect database performance, fleet health, ASH, and AWR data.",
+      "useCases": ["diagnose SQL regression", "inspect performance hub", "monitor database fleets"],
+      "keywords": ["database", "sql", "awr", "ash", "performance hub"],
+      "pricingNote": "See the official OCI pricing page for current terms.", "skill": "oci-db-observability",
+      "relatedServices": ["operations-insights", "management-agent"], "maturityLevels": ["L2"],
+      "docs": [
+        {"key": "DBM", "title": "Database Management", "url": "https://docs.oracle.com/en-us/iaas/database-management/home.htm"},
+        {"key": "DBMPH", "title": "Performance Hub", "url": "https://docs.oracle.com/en-us/iaas/database-management/doc/performance-hub.html"}
+      ]
+    },
+    {
+      "id": "operations-insights", "name": "Operations Insights", "category": "database", "signals": ["sql", "metrics"],
+      "summary": "Analyze SQL behavior and forecast database and host capacity.",
+      "useCases": ["forecast capacity", "analyze SQL trends", "compare database utilization"],
+      "keywords": ["opsi", "capacity", "forecast", "sql insights", "awr"],
+      "pricingNote": "See the official OCI pricing page for current terms.", "skill": "oci-db-observability",
+      "relatedServices": ["database-management"], "maturityLevels": ["L2", "L3"],
+      "docs": [
+        {"key": "OPSI", "title": "Operations Insights", "url": "https://docs.oracle.com/en-us/iaas/operations-insights/home.htm"},
+        {"key": "OPSICAP", "title": "Capacity planning", "url": "https://docs.oracle.com/en-us/iaas/operations-insights/doc/capacity-planning.html"}
+      ]
+    },
+    {
+      "id": "management-agent", "name": "Management Agent", "category": "agents", "signals": ["metrics", "logs"],
+      "summary": "Run plugins that collect telemetry from hosts and managed resources.",
+      "useCases": ["collect host telemetry", "scrape prometheus metrics", "support resource discovery"],
+      "keywords": ["agent", "prometheus", "plugin", "collector", "scrape"],
+      "pricingNote": "See the official OCI pricing page for current terms.", "skill": "oci-stack-monitoring-agents",
+      "relatedServices": ["stack-monitoring", "monitoring"], "maturityLevels": ["L1", "L2"],
+      "docs": [
+        {"key": "MA", "title": "Management Agent", "url": "https://docs.oracle.com/en-us/iaas/management-agents/home.htm"},
+        {"key": "MAPROM", "title": "Collect Prometheus metrics", "url": "https://docs.oracle.com/en-us/iaas/management-agents/doc/management-agents-collect-prometheus-metrics.html"}
+      ]
+    },
+    {
+      "id": "notifications", "name": "Notifications", "category": "eventing", "signals": ["events"],
+      "summary": "Deliver alarm and event messages to subscribed endpoints.",
+      "useCases": ["route alarm notifications", "fan out operational messages"],
+      "keywords": ["notifications", "topic", "subscription", "alarm"],
+      "pricingNote": "See the official OCI pricing page for current terms.", "skill": "oci-monitoring-alarms",
+      "relatedServices": ["monitoring", "events"], "maturityLevels": ["L1"],
+      "docs": [{"key": "NOTIF", "title": "Notifications", "url": "https://docs.oracle.com/en-us/iaas/Content/Notification/home.htm"}]
+    },
+    {
+      "id": "events", "name": "Events", "category": "eventing", "signals": ["events"],
+      "summary": "Match resource state changes and route event messages.",
+      "useCases": ["match resource events", "trigger automation from events"],
+      "keywords": ["events", "rules", "cloudevents", "event envelope"],
+      "pricingNote": "See the official OCI pricing page for current terms.", "skill": "oci-logging-pipelines",
+      "relatedServices": ["notifications", "service-connector-hub"], "maturityLevels": ["L0", "L1"],
+      "docs": [
+        {"key": "EVT", "title": "Events", "url": "https://docs.oracle.com/en-us/iaas/Content/Events/home.htm"},
+        {"key": "EVTENV", "title": "Event envelope reference", "url": "https://docs.oracle.com/en-us/iaas/Content/Events/Reference/eventenvelopereference.htm"}
+      ]
+    },
+    {
+      "id": "service-connector-hub", "name": "Connector Hub", "category": "eventing", "signals": ["logs", "events", "metrics"],
+      "summary": "Move observability data from OCI sources through optional tasks to targets.",
+      "useCases": ["route audit logs to analytics", "transform and fan out telemetry", "connect logs to streaming"],
+      "keywords": ["connector", "route", "pipeline", "service connector", "siem"],
+      "pricingNote": "See the official OCI pricing page for current terms.", "skill": "oci-logging-pipelines",
+      "relatedServices": ["logging", "streaming", "log-analytics"], "maturityLevels": ["L1", "L2"],
+      "docs": [{"key": "SCH", "title": "Connector Hub", "url": "https://docs.oracle.com/en-us/iaas/Content/connector-hub/overview.htm"}]
+    },
+    {
+      "id": "streaming", "name": "Streaming", "category": "eventing", "signals": ["events", "logs"],
+      "summary": "Buffer ordered partitioned records for durable stream processing.",
+      "useCases": ["buffer telemetry records", "build checkpointed consumers"],
+      "keywords": ["streaming", "partition", "offset", "checkpoint", "lag"],
+      "pricingNote": "See the official OCI pricing page for current terms.", "skill": "oci-logging-pipelines",
+      "relatedServices": ["service-connector-hub"], "maturityLevels": ["L2"],
+      "docs": [{"key": "STRM", "title": "Streaming", "url": "https://docs.oracle.com/en-us/iaas/Content/Streaming/home.htm"}]
+    }
+  ]
+}

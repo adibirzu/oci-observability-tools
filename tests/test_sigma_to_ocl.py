@@ -22,7 +22,9 @@ def test_examples_are_deterministic_and_lint_clean():
 
 def test_typing_modifiers_lists_and_all():
     output = convert(load("tests/fixtures/sigma/modifiers.yml"))
-    expected = json.loads(Path("tests/fixtures/sigma/expected/modifiers.json").read_text(encoding="utf-8"))
+    expected = json.loads(
+        Path("tests/fixtures/sigma/expected/modifiers.json").read_text(encoding="utf-8")
+    )
     assert output == expected
     query = output["query"]
     assert "'Event ID' in ('4688', '4689')" in query

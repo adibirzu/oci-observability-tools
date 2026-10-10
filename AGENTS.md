@@ -46,3 +46,16 @@ python scripts/redaction_check.py .
 ```
 
 The helpers do not contact OCI. Skills may show OCI CLI command shapes using placeholders; apply the safety rules and cite the associated official documentation.
+
+## Development pointers
+
+See `pyproject.toml` for explicit installed-package and asset configuration, and run `make check`
+for the complete offline gates. `tests/test_packaging.py` checks built and installed artifacts;
+`tests/test_chatgpt_bundle.py` checks every source skill against generated upload content.
+
+## Maintaining this file
+
+Keep this file for knowledge useful to almost every future agent session in this project.
+Do not repeat what the codebase already shows; point to the authoritative file or command instead.
+Prefer rewriting or pruning existing entries over appending new ones.
+When updating this file, preserve this bar for all agents and keep entries concise.

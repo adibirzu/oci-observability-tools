@@ -7,7 +7,6 @@ import argparse
 import re
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 KNOWLEDGE = ROOT / "chatgpt/knowledge"
 BUNDLES = [
@@ -20,6 +19,8 @@ BUNDLES = [
     ("07-stack-monitoring-agents.md", "oci-stack-monitoring-agents"),
     ("08-detections-sigma.md", "oci-detections-sigma"),
     ("09-maturity.md", "oci-om-maturity"),
+    ("10-apm-tracing.md", "oci-apm-tracing"),
+    ("11-monitoring-mql.md", "oci-monitoring-mql"),
 ]
 
 
@@ -34,15 +35,29 @@ def render_bundle(skill: str) -> str:
 
 
 def outputs() -> dict[Path, str]:
+    source = {path.parent.name for path in (ROOT / "skills").glob("*/SKILL.md")}
+    registered = [skill for _, skill in BUNDLES]
+    filenames = [filename for filename, _ in BUNDLES]
+    if len(registered) != len(set(registered)) or len(filenames) != len(set(filenames)):
+        raise ValueError("duplicate bundle registration")
+    if source != set(registered):
+        missing = ", ".join(sorted(source - set(registered)))
+        extra = ", ".join(sorted(set(registered) - source))
+        raise ValueError(
+            f"bundle coverage mismatch; unregistered: {missing}; missing source: {extra}"
+        )
     agents = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
     gemini = agents.replace(
         "Install for Codex: `./install.sh codex`.",
-        "Install for Gemini CLI: `./install.sh gemini`; for Antigravity: `./install.sh antigravity`.",
+        "Install for Gemini CLI: `./install.sh gemini`; "
+        "for Antigravity: `./install.sh antigravity`.",
     )
     result = {ROOT / "GEMINI.md": gemini}
     for filename, skill in BUNDLES:
         result[KNOWLEDGE / filename] = render_bundle(skill)
-    result[KNOWLEDGE / "services.json"] = (ROOT / "catalog/services.json").read_text(encoding="utf-8")
+    result[KNOWLEDGE / "services.json"] = (ROOT / "catalog/services.json").read_text(
+        encoding="utf-8"
+    )
     return result
 
 
@@ -50,8 +65,17 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args(argv)
-    stale = []
-    for path, content in outputs().items():
+    try:
+        rendered = outputs()
+    except ValueError as exc:
+        print(exc)
+        return 1
+    unexpected = sorted(path for path in KNOWLEDGE.glob("*.md") if path not in rendered)
+    stale = [path.relative_to(ROOT) for path in unexpected] if args.check else []
+    if not args.check:
+        for path in unexpected:
+            path.unlink()
+    for path, content in rendered.items():
         if args.check:
             if not path.exists() or path.read_text(encoding="utf-8") != content:
                 stale.append(path.relative_to(ROOT))

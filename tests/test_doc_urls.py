@@ -5,8 +5,14 @@ import sys
 from pathlib import Path
 from urllib.parse import urlparse
 
-
-SCOPES = [Path("skills"), Path("references"), Path("chatgpt"), Path("README.md"), Path("AGENTS.md"), Path("GEMINI.md")]
+SCOPES = [
+    Path("skills"),
+    Path("references"),
+    Path("chatgpt"),
+    Path("README.md"),
+    Path("AGENTS.md"),
+    Path("GEMINI.md"),
+]
 ALLOWED_HOSTS = {"docs.oracle.com", "www.oracle.com", "opentelemetry.io", "github.com"}
 
 
@@ -33,7 +39,11 @@ def test_each_skill_uses_catalog_official_docs():
     catalog = json.loads(Path("catalog/services.json").read_text(encoding="utf-8"))
     registered = {doc["url"] for service in catalog["services"] for doc in service["docs"]}
     for path in Path("skills").glob("*/SKILL.md"):
-        official = path.read_text(encoding="utf-8").split("## Official docs", 1)[1].split("## Related skills", 1)[0]
+        official = (
+            path.read_text(encoding="utf-8")
+            .split("## Official docs", 1)[1]
+            .split("## Related skills", 1)[0]
+        )
         urls = re.findall(r"https://[^\s)>\]]+", official)
         assert urls and set(urls) <= registered
 

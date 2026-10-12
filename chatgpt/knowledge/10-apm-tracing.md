@@ -25,7 +25,7 @@ For detailed configurations, see the [APM Tracing Reference](../../references/ap
 ## Workflow
 
 1. Retrieve the APM domain upload endpoint `<APM_DOMAIN_UPLOAD_ENDPOINT>` and generate `<APM_PRIVATE_DATAKEY>` from the OCI Console or CLI.
-2. Configure application OpenTelemetry SDKs or the OpenTelemetry Collector to send OTLP spans to the APM endpoint with header `Authorization: DataKey <APM_PRIVATE_DATAKEY>`.
+2. Configure application OpenTelemetry SDKs or the OpenTelemetry Collector with the documented OTLP/HTTP private-span upload URL, data-format parameters, and private data key. Verify the complete URL against the official guide; do not assume a generic authorization header.
 3. Set standard resource attributes, ensuring `service.name` uniquely and consistently identifies each microservice.
 4. Verify span ingestion in APM Trace Explorer, querying by service name and inspecting distributed call trees.
 5. Create synthetic monitors for critical HTTP/REST endpoints with automated alerts on failure.
@@ -33,7 +33,7 @@ For detailed configurations, see the [APM Tracing Reference](../../references/ap
 ## Pitfalls
 
 - Never expose `<APM_PRIVATE_DATAKEY>` in client-side code, mobile applications, or public repositories.
-- Allow for standard ingestion buffer latency (typically 1 to 2 minutes) before assuming telemetry ingestion failure.
+- Allow for ingestion lag and inspect exporter diagnostics before assuming telemetry ingestion failure; do not assume a fixed delay.
 - Inconsistent `service.name` values fragment service topology maps in APM.
 - Avoid attaching high-cardinality values (such as session IDs or full request payloads) as unindexed span tags.
 
@@ -42,10 +42,12 @@ For detailed configurations, see the [APM Tracing Reference](../../references/ap
 ```text
 # OpenTelemetry environment variables for backend service
 OTEL_SERVICE_NAME=order-service
-OTEL_EXPORTER_OTLP_ENDPOINT=<APM_DOMAIN_UPLOAD_ENDPOINT>
-OTEL_EXPORTER_OTLP_HEADERS="Authorization=DataKey <APM_PRIVATE_DATAKEY>"
+OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=<APM_TRACES_UPLOAD_URL>
 OTEL_TRACES_SAMPLER=parentbased_always_on
 ```
+
+The traces endpoint placeholder represents the complete authenticated URL from the [open-source tracing guide](https://docs.oracle.com/en-us/iaas/application-performance-monitoring/doc/configure-open-source-tracing-systems.html). Supply it through protected runtime configuration. A configuration example does not prove trace ingestion.
 
 ```text
 # Trace Explorer query to find slow requests
@@ -77,15 +79,15 @@ An APM domain represents the logical boundary for tracing telemetry in OCI. Each
 - **Private Data Key**: `<APM_PRIVATE_DATAKEY>` used for authenticating server-side instrumentation and OpenTelemetry Collector pipelines.
 - **Public Data Key**: `<APM_PUBLIC_DATAKEY>` used exclusively for client-side instrumentation (Browser RUM, mobile clients) where secrets cannot be protected.
 
-### Authentication Header Format
+### Signal-specific upload URL
 
-Telemetry sent to the APM data upload endpoint must include the authentication key in the request headers:
+Use the complete URL documented in [Configure Other Tracers](https://docs.oracle.com/en-us/iaas/application-performance-monitoring/doc/configure-open-source-tracing-systems.html):
 
 ```text
-Authorization: DataKey <APM_PRIVATE_DATAKEY>
+<APM_DOMAIN_UPLOAD_ENDPOINT>/20200101/observations/private-span?dataFormat=otlp-span&dataFormatVersion=1&dataKey=<APM_PRIVATE_DATAKEY>
 ```
 
-For OpenTelemetry HTTP exporters, the header is configured via exporter options or environment variables.
+Supply the resolved URL through protected runtime configuration. Do not log or share key-bearing URLs. Use a signal-specific traces endpoint to avoid automatic `/v1/traces` appending, and verify the exporter version. The following is a draft, not an ingestion receipt.
 
 ## OpenTelemetry Collector Configuration
 
@@ -111,9 +113,7 @@ processors:
 
 exporters:
   otlphttp/apm:
-    endpoint: "<APM_DOMAIN_UPLOAD_ENDPOINT>"
-    headers:
-      Authorization: "DataKey <APM_PRIVATE_DATAKEY>"
+    traces_endpoint: "<APM_TRACES_UPLOAD_URL>"
 
 service:
   pipelines:
@@ -188,7 +188,9 @@ Synthetic monitors simulate user transactions and verify availability:
 
 ## Configuration shape
 
-Use `<APM_DOMAIN_UPLOAD_ENDPOINT>` exactly as supplied by the APM domain. Server-side OTLP exporters authenticate with `<APM_PRIVATE_DATAKEY>` using the header and path shape in the official APM OpenTelemetry guide. Browser RUM must use `<APM_PUBLIC_DATAKEY>` only.
+Use `<APM_DOMAIN_UPLOAD_ENDPOINT>` as the base supplied by the APM domain, then construct the complete signal-specific URL from [Configure Other Tracers](https://docs.oracle.com/en-us/iaas/application-performance-monitoring/doc/configure-open-source-tracing-systems.html). For backend OTLP spans, the documented shape uses `/20200101/observations/private-span` with `dataFormat=otlp-span`, `dataFormatVersion=1`, and `dataKey=<APM_PRIVATE_DATAKEY>` query parameters. Do not assume a generic `Authorization: DataKey` header or a default `/v1/traces` path. Browser RUM uses `<APM_PUBLIC_DATAKEY>`.
+
+Configure the SDK's signal-specific traces endpoint or the Collector's `traces_endpoint` with `<APM_TRACES_UPLOAD_URL>`, representing that complete URL. Verify support in the chosen exporter version. Supply key-bearing URLs through protected runtime configuration and redact them from diagnostics. These examples are documentation-backed drafts; ingestion still requires live validation.
 
 Set a stable `service.name`, deployment environment, and service version. Choose sampling deliberately and inspect exporter diagnostics before concluding spans are missing.
 

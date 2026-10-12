@@ -14,13 +14,24 @@ def test_service_catalog_schema_and_integrity():
         import jsonschema
     except ImportError:
         pytest.skip("jsonschema is unavailable; minimal validator is covered separately")
-    jsonschema.Draft202012Validator(schema, format_checker=jsonschema.FormatChecker()).validate(catalog)
+    jsonschema.Draft202012Validator(schema, format_checker=jsonschema.FormatChecker()).validate(
+        catalog
+    )
     validate_catalog(catalog)
     services = catalog["services"]
     expected = {
-        "monitoring", "logging", "log-analytics", "apm", "stack-monitoring",
-        "database-management", "operations-insights", "management-agent", "notifications",
-        "events", "service-connector-hub", "streaming",
+        "monitoring",
+        "logging",
+        "log-analytics",
+        "apm",
+        "stack-monitoring",
+        "database-management",
+        "operations-insights",
+        "management-agent",
+        "notifications",
+        "events",
+        "service-connector-hub",
+        "streaming",
     }
     ids = [service["id"] for service in services]
     assert set(ids) == expected

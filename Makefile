@@ -1,6 +1,6 @@
-.PHONY: check test build linkcheck
+.PHONY: check test build linkcheck shellcheck
 
-check:
+check: build shellcheck
 	python -m ruff check .
 	python -m pytest -q
 	python scripts/redaction_check.py .
@@ -14,3 +14,6 @@ build:
 
 linkcheck:
 	@echo "Manual online task: verify catalog URLs return HTTP 200"
+
+shellcheck:
+	shellcheck install.sh

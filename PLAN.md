@@ -1,6 +1,6 @@
 # Plan: `oci-observability-tools` (new public GitHub repo)
 
-Status: planning only. A coding agent should be able to implement T1..T16 (section 9) in order without asking questions.
+Status: source plan and acceptance ledger. The current tree contains eleven skills. Source/local tests, live harness acceptance, CI, full-history safety, and published release evidence remain separate; unchecked criteria below are not satisfied by version declarations.
 Sources reused:
 - `~/dev/oci-skills`: layout, plugin manifests, install.sh, redaction gate, Log Analytics/OCL and Sigma lessons.
 - `~/dev/obs`: L0-L4 maturity path and the `governance/external-links.json` doc registry.
@@ -45,10 +45,10 @@ oci-observability-tools/
 ├── README.md  LICENSE(Apache-2.0)  NOTICE  SECURITY.md  CONTRIBUTING.md  CHANGELOG.md
 ├── AGENTS.md                     # Codex/generic entrypoint: skill index, routing, safety rules (<150 lines)
 ├── GEMINI.md                     # Gemini CLI/Antigravity context (generated from same source as AGENTS.md)
-├── CLAUDE.md                     # one line: @AGENTS.md
+├── CLAUDE.md                     # imports AGENTS.md
 ├── gemini-extension.json         # {name, version, description, contextFileName:"GEMINI.md"}
-├── Makefile                      # check = ruff + pytest + redaction; build; linkcheck (manual, online)
-├── pyproject.toml                # python>=3.10; deps pyyaml, jsonschema; dev: pytest, ruff
+├── Makefile                      # check = freshness + shellcheck + ruff + pytest + redaction
+├── pyproject.toml                # python>=3.10; explicit setuptools package/assets; runtime/dev deps
 ├── .redaction-allow              # empty; pathspec + mandatory justification comment per line
 ├── .gitignore  .gitleaks.toml  .pre-commit-config.yaml
 ├── .claude-plugin/plugin.json  .claude-plugin/marketplace.json
@@ -58,7 +58,9 @@ oci-observability-tools/
 │   ├── oci-om-router/SKILL.md
 │   ├── oci-ocl-queries/SKILL.md
 │   ├── oci-apm-otel/SKILL.md
+│   ├── oci-apm-tracing/SKILL.md
 │   ├── oci-monitoring-alarms/SKILL.md
+│   ├── oci-monitoring-mql/SKILL.md
 │   ├── oci-logging-pipelines/SKILL.md
 │   ├── oci-db-observability/SKILL.md
 │   ├── oci-stack-monitoring-agents/SKILL.md
@@ -105,7 +107,7 @@ oci-observability-tools/
   8. `## Related skills`
 - Skills link to shared material with `../../references/<file>.md`.
 
-## 3. Skills (9)
+## 3. Skills (11)
 
 Each doc key below maps to a `docs[]` entry in `catalog/services.json`. Every URL has the prefix `https://docs.oracle.com/en-us/iaas/` and returned HTTP 200.
 
@@ -223,6 +225,15 @@ Each doc key below maps to a `docs[]` entry in `catalog/services.json`. Every UR
    - Each level has a services and interlocks checklist, rewritten from the obs Atlas.
    - Includes the MCP safety pattern for agent-driven queries.
    - Cites MON, LA, APM, DBM, OPSI, SCH.
+
+10. **oci-apm-tracing**
+    - Existing specialized distributed tracing, Trace Explorer, and synthetic-monitor source:
+      `skills/oci-apm-tracing/SKILL.md`, with `references/apm-tracing.md`.
+11. **oci-monitoring-mql**
+    - Existing specialized MQL, split-metric alarm, and absence-trigger source:
+      `skills/oci-monitoring-mql/SKILL.md`, with `references/mql-syntax.md`.
+
+See `README.md` for ChatGPT upload usage and section 5 for the generator contract.
 
 ## 4. Capability catalog
 
@@ -347,9 +358,9 @@ All scripts use the stdlib plus pyyaml/jsonschema, expose `main(argv) -> int`, s
   - Prints `path:line:RULE`. Exits 1 on any finding.
   - Rules are listed in section 8.
 - **build_chatgpt.py** `[--check]`
-  - Writes `chatgpt/knowledge/01-router.md` … `09-maturity.md` (each SKILL.md plus the references it links) and `services.json`.
+  - Bundle registration is owned by `BUNDLES` in `scripts/build_chatgpt.py`; each output includes its source skill and linked references. The service catalog is copied to `chatgpt/knowledge/services.json`.
   - Renders GEMINI.md from AGENTS.md: same body, Gemini-specific install line.
-  - `--check` exits 1 if anything is stale.
+  - `--check` exits 1 on stale outputs, obsolete Markdown bundles, duplicate registrations, or a mismatch between registered bundles and source skills. Generation removes obsolete Markdown bundles.
 - **gen_oracle_docs.py** `[--check]`: renders `references/oracle-docs.md` from the catalog, grouped by service.
 - **install.sh**: bash 3.2-compatible, `set -euo pipefail`, shellcheck-clean.
   - Usage: `install.sh [--dry-run] [--uninstall] [--list] [claude|codex|gemini|antigravity ...]`.
@@ -377,7 +388,7 @@ All scripts use the stdlib plus pyyaml/jsonschema, expose `main(argv) -> int`, s
 - **Claude Code**
   - `.claude-plugin/plugin.json`: `{name: "oci-observability-tools", description (+disclaimer), version: "0.1.0", author{name,url}, homepage, repository, license: "Apache-2.0", keywords}`.
   - `marketplace.json`: `{$schema: "https://anthropic.com/claude-code/marketplace.schema.json", name, owner, plugins: [{name, description, version, source: "./", category: "observability"}]}`.
-  - Users install with `/plugin marketplace add <owner>/oci-observability-tools`.
+  - See `README.md` for the current marketplace installation instructions.
 - **Codex**
   - `.codex-plugin/plugin.json` has the same identity fields plus `"skills": "skills/"`.
   - AGENTS.md contains the disclaimer, a skill index (name → when to use), the routing rule ("start with oci-om-router when unsure"), the safety rules (section 8, item 9), and copy-paste helper commands.
@@ -396,6 +407,12 @@ All scripts use the stdlib plus pyyaml/jsonschema, expose `main(argv) -> int`, s
 
 ## 7. Test strategy (pytest, offline only)
 
+`tests/test_packaging.py` builds actual sdist/wheel and editable artifacts, checks tools/assets and
+runtime dependency metadata, excludes private recovery files, and runs installed helpers and
+generator freshness outside the source tree. `tests/test_chatgpt_bundle.py` compares emitted names,
+complete source bodies, and linked references against every source skill, and verifies deterministic
+regeneration and rejection of unregistered skills and obsolete generated bundles.
+
 | File | Asserts |
 |---|---|
 | test_frontmatter.py | Every skill starts with a `---` YAML block. Keys ⊆ {name, description, license}. `name` equals the dir name. Description length and "Use when" checks pass. Required sections appear in order. Every `../../references/*.md` link exists. |
@@ -411,13 +428,14 @@ All scripts use the stdlib plus pyyaml/jsonschema, expose `main(argv) -> int`, s
 | test_manifests.py | All three manifests plus `gemini-extension.json` parse. name, version, and license agree with each other and with pyproject. Every description contains "Not an Oracle product". |
 
 **CI** (`.github/workflows/ci.yml`):
-- Runs on push and pull_request, with `permissions: contents: read` and no secrets.
+- Runs on push and pull_request, with `contents: read` and `pull-requests: read` permissions.
+  Gitleaks receives only the automatically generated `GITHUB_TOKEN` through its documented env input.
 - Matrix: ubuntu-latest and macos-latest, Python 3.10 and 3.12.
 - Steps:
   1. checkout with `fetch-depth: 0`
   2. setup-python
   3. `pip install -e .[dev]`
-  4. `ruff check .`
+  4. `ruff check .` plus both generators with `--check`
   5. `shellcheck install.sh` (ubuntu only)
   6. `python scripts/redaction_check.py .`
   7. `pytest -q`
@@ -480,19 +498,19 @@ All scripts use the stdlib plus pyyaml/jsonschema, expose `main(argv) -> int`, s
 - **T6** `ocl_lint.py` (including `sanitize_for_mcp`), `test_ocl_lint.py`, fixtures, `ocl-cookbook.md` (25 generic queries covering Windows, Linux, OCI Audit, VCN flow logs, and OKE).
 - **T7** `sigma_to_ocl.py`, `examples/sigma/*.yml`, golden files, `test_sigma_to_ocl.py`.
 - **T8** Skills 1-2 (router, OCL), then `test_frontmatter.py` and `test_skill_size.py`.
-- **T9** Skills 3-9 and the remaining references: mql-cookbook, otel-to-apm, pipelines-patterns, mcp-safety, maturity-l0-l4, portable-deploy. Plus `examples/cloudevents/*.json`.
+- **T9** Skills 3-11 and the remaining references: mql-cookbook, otel-to-apm, pipelines-patterns, mcp-safety, maturity-l0-l4, portable-deploy. Plus `examples/cloudevents/*.json`.
 - **T10** `gen_oracle_docs.py`, `oracle-docs.md`, `test_doc_urls.py`.
 - **T11** Manifests (Claude, Codex, Gemini), AGENTS.md, CLAUDE.md, `test_manifests.py`.
 - **T12** `build_chatgpt.py`, GEMINI.md generation, chatgpt/ files, generated knowledge, `test_chatgpt_bundle.py`.
 - **T13** `install.sh` and `test_install_dryrun.py`; shellcheck-clean.
-- **T14** CI workflow and PR template (checklist: redaction, catalog URLs, under 500 lines). `make check` is green locally on macOS.
+- **T14** CI workflow and PR template (checklist: redaction, catalog URLs, under 500 lines). Require local `make check` success and separate CI matrix evidence; an offline Linux pass does not establish macOS acceptance.
 - **T15** Final README with per-harness install, skill table, `catalog_query` demo, and maturity map. Run `make linkcheck` (online, manual). Run gitleaks over the full history.
-- **T16** Manual smoke test in each harness with the prompt "Which OCI service should I use to trace a slow API?". The answer must route to APM and cite APMOTEL. Record results in CHANGELOG 0.1.0 and tag v0.1.0. Repo visibility switches to public only after explicit owner approval.
+- **T16** Manual smoke test in each harness with the prompt "Which OCI service should I use to trace a slow API?". The answer must route to APM and cite APMOTEL. Record real loaded-agent results separately from offline asset checks before any authorized v0.1.0 tag. Live harness smoke and release publication remain pending; the packaging repair does not authorize them, and AGY runtime is excluded. Repo visibility switches to public only after explicit owner approval.
 
 ## 10. Acceptance criteria
 
 - [ ] The tree matches section 2, and generated files are fresh (`--check` passes).
-- [ ] 9 skills, each with valid frontmatter, required sections, under 500 lines, and Official-docs URLs that are all registered in the catalog.
+- [ ] 11 skills, each with valid frontmatter, required sections, under 500 lines, and Official-docs URLs that are all registered in the catalog.
 - [ ] `services.json` validates, has 12 services, and every URL is on docs.oracle.com or oracle.com. `make linkcheck` returns 200 for all of them.
 - [ ] The four helpers run offline with `--help`, are unit-tested, and Sigma output is deterministic and lint-clean.
 - [ ] `pytest -q` passes offline on macOS and Ubuntu with Python 3.10 and 3.12. ruff and shellcheck are clean, and CI is green.

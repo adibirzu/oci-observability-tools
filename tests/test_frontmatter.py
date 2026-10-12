@@ -3,10 +3,15 @@ from pathlib import Path
 
 import yaml
 
-
 SECTIONS = [
-    "# ", "## When to use", "## Key concepts", "## Workflow", "## Pitfalls",
-    "## Examples", "## Official docs", "## Related skills",
+    "# ",
+    "## When to use",
+    "## Key concepts",
+    "## Workflow",
+    "## Pitfalls",
+    "## Examples",
+    "## Official docs",
+    "## Related skills",
 ]
 
 

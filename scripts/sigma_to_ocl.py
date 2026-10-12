@@ -11,9 +11,9 @@ from pathlib import Path
 
 import yaml
 
-try:
-    from scripts.ocl_lint import lint
-except ModuleNotFoundError:
+if __package__:
+    from .ocl_lint import lint
+else:
     from ocl_lint import lint
 
 
@@ -48,13 +48,19 @@ def _term(field_spec: str, value: object, warnings: list[str]) -> str:
             return f"{field} like {quote('*' + str(single))}"
         if modifier == "re":
             return f"{field} matches {quote(single)}"
-        literal = str(single) if mapping["type"] == "number" and isinstance(single, (int, float)) else quote(single)
+        literal = (
+            str(single)
+            if mapping["type"] == "number" and isinstance(single, (int, float))
+            else quote(single)
+        )
         return f"{field} = {literal}"
 
     if isinstance(value, list):
         if not modifier:
             literals = [
-                str(item) if mapping["type"] == "number" and isinstance(item, (int, float)) else quote(item)
+                str(item)
+                if mapping["type"] == "number" and isinstance(item, (int, float))
+                else quote(item)
                 for item in value
             ]
             return f"{field} in ({', '.join(literals)})"
@@ -65,9 +71,13 @@ def _term(field_spec: str, value: object, warnings: list[str]) -> str:
 
 def _selection(value: object, warnings: list[str]) -> str:
     if isinstance(value, list):
-        return "(" + " or ".join(
-            f"'Original Log Content' like {quote('*' + str(item) + '*')}" for item in value
-        ) + ")"
+        return (
+            "("
+            + " or ".join(
+                f"'Original Log Content' like {quote('*' + str(item) + '*')}" for item in value
+            )
+            + ")"
+        )
     if not isinstance(value, dict):
         raise UnsupportedSigma("selection must be a mapping or keyword list")
     return "(" + " and ".join(_term(field, item, warnings) for field, item in value.items()) + ")"

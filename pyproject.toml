@@ -6,12 +6,38 @@ build-backend = "setuptools.build_meta"
 name = "oci-observability-tools"
 version = "0.1.0"
 description = "Offline skills and validators for OCI Observability and Management"
+readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "Apache-2.0"}
 dependencies = ["PyYAML>=6", "jsonschema>=4"]
 
 [project.optional-dependencies]
-dev = ["pytest>=7", "ruff>=0.6"]
+dev = ["pytest>=7", "ruff>=0.6", "build>=1", "setuptools>=68", "wheel"]
+
+[project.urls]
+Homepage = "https://github.com/adibirzu/oci-observability-tools"
+Repository = "https://github.com/adibirzu/oci-observability-tools"
+
+[project.scripts]
+oci-catalog-query = "oci_observability_tools.scripts.catalog_query:main"
+oci-ocl-lint = "oci_observability_tools.scripts.ocl_lint:main"
+oci-sigma-to-ocl = "oci_observability_tools.scripts.sigma_to_ocl:main"
+oci-redaction-check = "oci_observability_tools.scripts.redaction_check:main"
+
+[tool.setuptools]
+packages = ["oci_observability_tools", "oci_observability_tools.scripts"]
+package-dir = {oci_observability_tools = "."}
+include-package-data = false
+
+[tool.setuptools.package-data]
+oci_observability_tools = [
+    "catalog/*.json", "references/*.md", "skills/*/SKILL.md",
+    "chatgpt/*.md", "chatgpt/knowledge/*.md", "chatgpt/knowledge/*.json",
+    "examples/sigma/*.yml", "examples/cloudevents/*.json",
+    ".claude-plugin/*.json", ".codex-plugin/*.json",
+    "AGENTS.md", "CLAUDE.md", "GEMINI.md", "gemini-extension.json", "install.sh",
+    "LICENSE", "NOTICE", "README.md",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

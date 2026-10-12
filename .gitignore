@@ -10,3 +10,6 @@ dist/
 venv/
 .tox/
 node_modules/
+
+# Private Firstmate recovery checkpoint; never part of a distribution or commit.
+.task-private

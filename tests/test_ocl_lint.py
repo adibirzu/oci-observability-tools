@@ -5,7 +5,6 @@ import pytest
 
 from scripts.ocl_lint import lint, sanitize_for_mcp
 
-
 BAD = {
     "OCL001": "Log Source = 'x'",
     "OCL002": "'Event ID' = 4625",
@@ -24,14 +23,17 @@ def test_each_rule_fires(rule, query):
     assert rule in {item.rule for item in lint(query)}
 
 
-@pytest.mark.parametrize("query", [
-    "'Log Source' = 'OCI Audit Logs'",
-    "'Event ID' = '4625'",
-    "'Source Port' = 443",
-    "'Log Source' = 'x' and 'Original Log Content' like '*error*'",
-    "('Log Source' = 'x') | stats count as Count",
-    "'Log Source' like '*Audit*'",
-])
+@pytest.mark.parametrize(
+    "query",
+    [
+        "'Log Source' = 'OCI Audit Logs'",
+        "'Event ID' = '4625'",
+        "'Source Port' = 443",
+        "'Log Source' = 'x' and 'Original Log Content' like '*error*'",
+        "('Log Source' = 'x') | stats count as Count",
+        "'Log Source' like '*Audit*'",
+    ],
+)
 def test_clean_variants(query):
     assert not lint(query)
 
@@ -44,7 +46,10 @@ def test_all_documented_ocl_blocks_lint_clean():
 
 
 def test_sanitize_for_mcp():
-    assert sanitize_for_mcp("  'Log Source' = 'x'\n | stats count  ") == "'Log Source' = 'x' | stats count"
+    assert (
+        sanitize_for_mcp("  'Log Source' = 'x'\n | stats count  ")
+        == "'Log Source' = 'x' | stats count"
+    )
     for unsafe in ["x; y", "`x`", "('x'", "x" * 8001]:
         with pytest.raises(ValueError):
             sanitize_for_mcp(unsafe)

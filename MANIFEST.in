@@ -1,0 +1,5 @@
+prune tests
+prune docs
+prune .task-private
+prune .venv
+global-exclude __pycache__ *.py[cod]

@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
   test:
@@ -23,9 +24,13 @@ jobs:
           python-version: ${{ matrix.python }}
       - run: pip install -e ".[dev]"
       - run: ruff check .
+      - run: python scripts/gen_oracle_docs.py --check
+      - run: python scripts/build_chatgpt.py --check
       - if: runner.os == 'Linux'
         run: shellcheck install.sh
       - run: python scripts/redaction_check.py .
       - run: pytest -q
       - if: runner.os == 'Linux'
         uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -5,10 +5,19 @@ from __future__ import annotations
 import datetime as dt
 import re
 
-
 SERVICE_FIELDS = {
-    "id", "name", "category", "signals", "summary", "useCases", "keywords", "pricingNote",
-    "skill", "relatedServices", "maturityLevels", "docs",
+    "id",
+    "name",
+    "category",
+    "signals",
+    "summary",
+    "useCases",
+    "keywords",
+    "pricingNote",
+    "skill",
+    "relatedServices",
+    "maturityLevels",
+    "docs",
 }
 CATEGORIES = {"metrics", "logs", "traces", "database", "agents", "eventing"}
 SIGNALS = {"metrics", "logs", "traces", "events", "sql", "topology", "synthetic"}
@@ -31,7 +40,11 @@ def validate_catalog(data: dict) -> None:
             raise ValueError("invalid service id")
         if service["category"] not in CATEGORIES or not set(service["signals"]) <= SIGNALS:
             raise ValueError("invalid category or signal")
-        if len(service["summary"]) > 280 or len(service["useCases"]) < 2 or len(service["keywords"]) < 2:
+        if (
+            len(service["summary"]) > 280
+            or len(service["useCases"]) < 2
+            or len(service["keywords"]) < 2
+        ):
             raise ValueError("invalid catalog content lengths")
         if not set(service["relatedServices"]) <= ids:
             raise ValueError("unknown related service")

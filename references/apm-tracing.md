@@ -10,15 +10,15 @@ An APM domain represents the logical boundary for tracing telemetry in OCI. Each
 - **Private Data Key**: `<APM_PRIVATE_DATAKEY>` used for authenticating server-side instrumentation and OpenTelemetry Collector pipelines.
 - **Public Data Key**: `<APM_PUBLIC_DATAKEY>` used exclusively for client-side instrumentation (Browser RUM, mobile clients) where secrets cannot be protected.
 
-### Authentication Header Format
+### Signal-specific upload URL
 
-Telemetry sent to the APM data upload endpoint must include the authentication key in the request headers:
+Use the complete URL documented in [Configure Other Tracers](https://docs.oracle.com/en-us/iaas/application-performance-monitoring/doc/configure-open-source-tracing-systems.html):
 
 ```text
-Authorization: DataKey <APM_PRIVATE_DATAKEY>
+<APM_DOMAIN_UPLOAD_ENDPOINT>/20200101/observations/private-span?dataFormat=otlp-span&dataFormatVersion=1&dataKey=<APM_PRIVATE_DATAKEY>
 ```
 
-For OpenTelemetry HTTP exporters, the header is configured via exporter options or environment variables.
+Supply the resolved URL through protected runtime configuration. Do not log or share key-bearing URLs. Use a signal-specific traces endpoint to avoid automatic `/v1/traces` appending, and verify the exporter version. The following is a draft, not an ingestion receipt.
 
 ## OpenTelemetry Collector Configuration
 
@@ -44,9 +44,7 @@ processors:
 
 exporters:
   otlphttp/apm:
-    endpoint: "<APM_DOMAIN_UPLOAD_ENDPOINT>"
-    headers:
-      Authorization: "DataKey <APM_PRIVATE_DATAKEY>"
+    traces_endpoint: "<APM_TRACES_UPLOAD_URL>"
 
 service:
   pipelines:

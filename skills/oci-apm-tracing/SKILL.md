@@ -25,7 +25,7 @@ For detailed configurations, see the [APM Tracing Reference](../../references/ap
 ## Workflow
 
 1. Retrieve the APM domain upload endpoint `<APM_DOMAIN_UPLOAD_ENDPOINT>` and generate `<APM_PRIVATE_DATAKEY>` from the OCI Console or CLI.
-2. Configure application OpenTelemetry SDKs or the OpenTelemetry Collector to send OTLP spans to the APM endpoint with header `Authorization: DataKey <APM_PRIVATE_DATAKEY>`.
+2. Configure application OpenTelemetry SDKs or the OpenTelemetry Collector with the documented OTLP/HTTP private-span upload URL, data-format parameters, and private data key. Verify the complete URL against the official guide; do not assume a generic authorization header.
 3. Set standard resource attributes, ensuring `service.name` uniquely and consistently identifies each microservice.
 4. Verify span ingestion in APM Trace Explorer, querying by service name and inspecting distributed call trees.
 5. Create synthetic monitors for critical HTTP/REST endpoints with automated alerts on failure.
@@ -33,7 +33,7 @@ For detailed configurations, see the [APM Tracing Reference](../../references/ap
 ## Pitfalls
 
 - Never expose `<APM_PRIVATE_DATAKEY>` in client-side code, mobile applications, or public repositories.
-- Allow for standard ingestion buffer latency (typically 1 to 2 minutes) before assuming telemetry ingestion failure.
+- Allow for ingestion lag and inspect exporter diagnostics before assuming telemetry ingestion failure; do not assume a fixed delay.
 - Inconsistent `service.name` values fragment service topology maps in APM.
 - Avoid attaching high-cardinality values (such as session IDs or full request payloads) as unindexed span tags.
 
@@ -42,10 +42,12 @@ For detailed configurations, see the [APM Tracing Reference](../../references/ap
 ```text
 # OpenTelemetry environment variables for backend service
 OTEL_SERVICE_NAME=order-service
-OTEL_EXPORTER_OTLP_ENDPOINT=<APM_DOMAIN_UPLOAD_ENDPOINT>
-OTEL_EXPORTER_OTLP_HEADERS="Authorization=DataKey <APM_PRIVATE_DATAKEY>"
+OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=<APM_TRACES_UPLOAD_URL>
 OTEL_TRACES_SAMPLER=parentbased_always_on
 ```
+
+The traces endpoint placeholder represents the complete authenticated URL from the [open-source tracing guide](https://docs.oracle.com/en-us/iaas/application-performance-monitoring/doc/configure-open-source-tracing-systems.html). Supply it through protected runtime configuration. A configuration example does not prove trace ingestion.
 
 ```text
 # Trace Explorer query to find slow requests

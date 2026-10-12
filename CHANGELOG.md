@@ -4,6 +4,17 @@ All notable changes follow Keep a Changelog. This project uses Semantic Versioni
 
 ## [Unreleased]
 
+### Added
+
+- Two illustrative README comparisons for API diagnosis and audit/metric alerting, with matching prompts, official references, and a controlled-comparison rubric.
+- Router guidance for capability boundaries, prerequisites, evidence status, and independent signal validation.
+
+### Fixed
+
+- Missing-heartbeat MQL examples now use `absent()` instead of a zero-count threshold.
+- Heartbeat and absence questions route to Monitoring through explicit catalog keywords, covered by regression tests.
+- APM export drafts now use the documented signal-specific upload URL rather than an assumed authorization header and base endpoint.
+
 ## [0.1.0] - 2026-10-09
 
 ### Added

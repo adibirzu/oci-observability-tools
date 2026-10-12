@@ -103,12 +103,13 @@ Configuration parameters:
 Absence alarms trigger when an expected metric stops reporting, signaling host failure or agent outage:
 
 ```text
-# Metric reporting count falls to zero or ceases
-Heartbeat[5m]{appName = "payment-service"}.groupBy(hostId).count() == 0
+# Missing heartbeat for the entire aggregation interval
+Heartbeat[5m]{appName = "<APP_NAME>"}.groupBy(hostId).absent()
 ```
 
 Configuration:
-- Set alarm condition to trigger on missing data / absence rather than threshold values.
+- Use `absent()` rather than `.count() == 0`; verify the custom metric and dimension names before use.
+- Set pending duration separately from the aggregation interval. The absence detection period limits how long the statistic continues to report absence; it is not the firing delay.
 - Differentiate between a metric value of 0 (normal idle state) and absence of data points (collection pipeline down).
 
 ## Official Oracle Documentation

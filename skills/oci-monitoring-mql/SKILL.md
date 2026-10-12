@@ -47,8 +47,10 @@ CpuUtilization[5m]{availabilityDomain = "<AVAILABILITY_DOMAIN>"}.groupBy(resourc
 
 ```text
 # Service heartbeat absence alarm
-CustomHeartbeat[5m]{appName = "payment-api"}.groupBy(instanceId).count() == 0
+CustomHeartbeat[5m]{appName = "<APP_NAME>"}.groupBy(instanceId).absent()
 ```
+
+This draft assumes a custom metric with `appName` and `instanceId` dimensions. Verify the emitted schema, namespace, scope, and cadence first. Use `absent()` for missing telemetry; `.count() == 0` is not a substitute. The interval, pending duration, and absence detection period are separate settings; see the [MQL reference](https://docs.oracle.com/en-us/iaas/Content/Monitoring/Reference/mql.htm). Query text alone does not configure or test an alarm.
 
 ## Official docs
 

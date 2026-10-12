@@ -31,10 +31,13 @@ Conceptual equivalents are not exact product parity: CloudWatch metrics and logs
 2. Rank catalog services and open the owning skill.
 3. Check interlocks: collection, routing, storage, query, alert, and notification.
 4. Cite the official page for the recommended capability.
+5. Use the [capability answer guide](../../references/capability-answers.md): explain service boundaries, prerequisites, a bounded next step, validation, and evidence status. Keep the answer proportional to the question.
 
 ## Pitfalls
 
 Do not route every log question to Log Analytics: use Logging for collection and simple access. Do not use APM for host topology or Operations Insights for live incident triage. Never infer current limits or prices.
+
+Catalog scores are keyword matches, not confidence or proof of capability. For multi-signal questions, route each job separately. A zero-score result is not a recommendation. Verify version-sensitive capabilities against current official documentation when browsing is available; otherwise label them as unverified against current docs. Installed skills do not establish tenancy access or prove telemetry collection.
 
 ## Examples
 

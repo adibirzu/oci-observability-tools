@@ -2,6 +2,8 @@ import json
 import subprocess
 import sys
 
+import pytest
+
 from scripts.catalog_query import search
 
 
@@ -19,6 +21,11 @@ def test_expected_routing():
 
 def test_order_is_deterministic():
     assert search("logs and metrics", 12) == search("logs and metrics", 12)
+
+
+@pytest.mark.parametrize("question", ["custom heartbeat absence", "detect missing heartbeat"])
+def test_heartbeat_questions_route_to_monitoring(question):
+    assert ids(question)[0] == "monitoring"
 
 
 def test_cli_json_and_validation():

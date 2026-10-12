@@ -47,8 +47,10 @@ CpuUtilization[5m]{availabilityDomain = "<AVAILABILITY_DOMAIN>"}.groupBy(resourc
 
 ```text
 # Service heartbeat absence alarm
-CustomHeartbeat[5m]{appName = "payment-api"}.groupBy(instanceId).count() == 0
+CustomHeartbeat[5m]{appName = "<APP_NAME>"}.groupBy(instanceId).absent()
 ```
+
+This draft assumes a custom metric with `appName` and `instanceId` dimensions. Verify the emitted schema, namespace, scope, and cadence first. Use `absent()` for missing telemetry; `.count() == 0` is not a substitute. The interval, pending duration, and absence detection period are separate settings; see the [MQL reference](https://docs.oracle.com/en-us/iaas/Content/Monitoring/Reference/mql.htm). Query text alone does not configure or test an alarm.
 
 ## Official docs
 
@@ -170,12 +172,13 @@ Configuration parameters:
 Absence alarms trigger when an expected metric stops reporting, signaling host failure or agent outage:
 
 ```text
-# Metric reporting count falls to zero or ceases
-Heartbeat[5m]{appName = "payment-service"}.groupBy(hostId).count() == 0
+# Missing heartbeat for the entire aggregation interval
+Heartbeat[5m]{appName = "<APP_NAME>"}.groupBy(hostId).absent()
 ```
 
 Configuration:
-- Set alarm condition to trigger on missing data / absence rather than threshold values.
+- Use `absent()` rather than `.count() == 0`; verify the custom metric and dimension names before use.
+- Set pending duration separately from the aggregation interval. The absence detection period limits how long the statistic continues to report absence; it is not the firing delay.
 - Differentiate between a metric value of 0 (normal idle state) and absence of data points (collection pipeline down).
 
 ## Official Oracle Documentation

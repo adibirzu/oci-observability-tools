@@ -6,7 +6,7 @@
       "id": "monitoring", "name": "Monitoring", "category": "metrics", "signals": ["metrics"],
       "summary": "Query service and custom metrics and create alarms.",
       "useCases": ["query service metrics", "publish custom metrics", "create threshold alarms"],
-      "keywords": ["mql", "alarm", "threshold", "cpu", "metric"],
+      "keywords": ["mql", "alarm", "threshold", "cpu", "metric", "heartbeat", "absence"],
       "pricingNote": "See the official OCI pricing page for current terms.", "skill": "oci-monitoring-alarms",
       "relatedServices": ["notifications"], "maturityLevels": ["L1"],
       "docs": [
